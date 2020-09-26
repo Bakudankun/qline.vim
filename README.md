@@ -3,6 +3,8 @@
 The quick, fully-customizable status line plugin written in cutting-edge Vim9
 script.
 
+![Demo](https://user-images.githubusercontent.com/4504807/94335198-e36f4c00-0014-11eb-9c48-b7a39463688a.gif)
+
 
 ## Requirement
 
