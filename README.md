@@ -41,7 +41,7 @@ import {GetBufVar, WinEval} from 'qline/util.vim'
 " Vim script.
 def s:qline_config()
   g:qline_config = #{
-# Use the powerline glyphs for pearators.
+# Use the powerline glyphs for separators.
     separator:    #{left: "\ue0b0", right: "\ue0b2", margin: ' '},
     subseparator: #{left: "\ue0b1", right: "\ue0b3", margin: ' '},
 # Specify components in the each sides for active/inactive windows.
