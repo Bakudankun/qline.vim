@@ -170,4 +170,13 @@ export def GetComponentContent(name: string): string
 enddef
 
 
+let win_call_ret: any = 0
+let WinCallFunc: func
+def WinCall(Func: func): any
+  WinCallFunc = Func
+  win_execute(g:statusline_winid, 's:win_call_ret = s:WinCallFunc()')
+  return win_call_ret
+enddef
+
+
 # vim: et sw=2 sts=-1 cc=+1
