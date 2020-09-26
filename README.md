@@ -22,8 +22,9 @@ with some differences. After loading, the dictionary will be "merged" with the
 default configuration, so you can check `g:qline_config` to see the current
 configuration at any time.
 
-The default configuration is written [here](TBD). The example configuration
-which is part of mine is in the following spoiler.
+The default configuration is written in the [config.vim](import/qline/config.vim)
+file. The example configuration which is part of mine is in the following
+spoiler.
 
 <details>
 <summary>Example configuration</summary>
