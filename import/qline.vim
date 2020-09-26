@@ -25,6 +25,9 @@ export def Statusline(): string
 
   import GetHighlight from './qline/colorscheme.vim'
 
+  g:actual_curbuf = bufnr()
+  g:actual_curwin = win_getid()
+
   const type: string = g:statusline_winid == win_getid() ? 'active' : 'inactive'
   const mode: string = type ==# 'inactive' ? 'inactive'
     : mode_strings->get(mode(), 'normal')
@@ -135,7 +138,7 @@ export def GetComponentContent(name: string): string
   if type(Component) == v:t_string
     return Component
   elseif type(Component) == v:t_func
-    return '' .. Component(g:statusline_winid)
+    return '' .. WinCall(Component)
   elseif type(Component) == v:t_dict
     let visible: bool = false
     if !Component->has_key('visible_condition')
@@ -143,7 +146,7 @@ export def GetComponentContent(name: string): string
       visible = true
     elseif type(Component.visible_condition) == v:t_func
       try
-        visible = !!Component.visible_condition(g:statusline_winid)
+        visible = !!WinCall(Component.visible_condition)
       catch
         return '#ERROR#'
       endtry
@@ -159,7 +162,7 @@ export def GetComponentContent(name: string): string
       return Component.content
     elseif type(Component.content) == v:t_func
       try
-        return '' .. Component.content(g:statusline_winid)
+        return '' .. WinCall(Component.content)
       catch
         return '#ERROR#'
       endtry

@@ -1,7 +1,5 @@
 vim9script
 
-import GetWinVar from './util.vim'
-
 let initialized: bool = false
 
 
@@ -26,7 +24,7 @@ enddef
 
 
 def Init()
-  def Mode_Content(winid: number): string
+  def Mode_Content(): string
     let mode_map: dict<string> = Get('mode_map')
     let mode_char: string = mode(1)
     if mode_map->has_key(mode_char)
@@ -40,7 +38,7 @@ def Init()
     return Get('mode_map')->get(mode_char, '')
   enddef
 
-  def SearchCount_Content(winid: number): string
+  def SearchCount_Content(): string
     let result: dict<number> = searchcount(#{recompute: true})
     if !result
       return ''
@@ -101,23 +99,23 @@ def Init()
       },
       modified: #{
         content: '%M',
-        visible_condition: {winid -> GetWinVar('&modified') || !GetWinVar('&modifiable')},
+        visible_condition: {-> &modified || !&modifiable},
       },
       keymap: #{
         content: '%k',
-        visible_condition: {winid -> GetWinVar('&keymap')},
+        visible_condition: {-> &keymap},
       },
       bufnum: #{
         content: '%n',
       },
       paste: #{
         content: 'PASTE',
-        visible_condition: {winid -> &paste},
+        visible_condition: {-> &paste},
         highlight: 'paste',
       },
       readonly: #{
         content: '%R',
-        visible_condition: {winid -> GetWinVar('&readonly')},
+        visible_condition: {-> &readonly},
       },
       charvalue: #{
         content: '%b',
@@ -126,13 +124,13 @@ def Init()
         content: '%B',
       },
       fileencoding: #{
-        content: '%{&fenc ==# "" ? &enc : &fenc}',
+        content: {-> &fenc || &enc},
       },
       fileformat: #{
         content: '%{&ff}',
       },
       filetype: #{
-        content:  '%{&ft ==# "" ? "no ft" : &ft}',
+        content:  {-> &ft || "no ft"},
       },
       percent: #{
         content: '%3p%%',
@@ -142,7 +140,7 @@ def Init()
       },
       spell: #{
         content: '%{&spelllang}',
-        visible_condition: {winid -> GetWinVar('&spell') && GetWinVar('&spelllang')},
+        visible_condition: {-> &spell && &spelllang},
       },
       lineinfo: #{
         content: '%3l:%-2v',
@@ -165,7 +163,7 @@ def Init()
       },
       searchcount: #{
         content: SearchCount_Content,
-        visible_condition: {winid -> v:hlsearch},
+        visible_condition: {-> v:hlsearch},
       },
     },
     colorscheme: 'default',
