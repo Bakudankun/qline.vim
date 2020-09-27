@@ -32,6 +32,9 @@ spoiler.
 <summary>Example configuration</summary>
 
 ```vim
+" Define highlight for Git-related components.
+highlight Git guibg=#F34F29 guifg=#FFFFFF ctermbg=202 ctermfg=231
+
 " Define a :def function to use Vim9 syntax and compiled lambdas in a legacy
 " Vim script.
 def s:qline_config()
@@ -44,7 +47,7 @@ def s:qline_config()
     active: #{
       left: [
         ['bufnum', 'mode', 'paste'],
-        ['fugitive', 'filename', 'gitgutter'],
+        ['gina_branch', 'gina_traffic', 'gina_status', 'filename', 'gitgutter'],
         ['bufstate']
       ],
       right: [
@@ -96,11 +99,18 @@ def s:qline_config()
       filetype: #{
         content: {-> nerdfont#find()},
       },
-      fugitive: #{
-        content: {->
-          eval('FugitiveStatusline()')
-            ->substitute('\[GIT(\(.*\))]\|\[GIT:\(.*\)(.*)]', "\ue0a0\\1\\2", '')
-        },
+      gina_branch: #{
+        content: {-> "\ue0a0" .. gina#component#repo#branch()},
+        visible_condition: function('gina#component#repo#branch'),
+        highlight: 'Git',
+      },
+      gina_traffic: #{
+        content: function('gina#component#traffic#preset', ['fancy']),
+        highlight: 'Git',
+      },
+      gina_status: #{
+        content: function('gina#component#status#preset', ['fancy']),
+        highlight: 'Git',
       },
       gitgutter: #{
         content: {->
@@ -127,8 +137,8 @@ Note that some components use followings:
 
 * [Nerd Font](https://www.nerdfonts.com/)
 * [lambdalisue/nerdfont.vim](https://github.com/lambdalisue/nerdfont.vim)
+* [lambdalisue/gina.vim](https://github.com/lambdalisue/gina.vim)
 * [airblade/vim-gitgutter](https://github.com/airblade/vim-gitgutter)
-* [tpope/vim-fugitive](https://github.com/tpope/vim-fugitive)
 
 
 ## Colorschemes?
