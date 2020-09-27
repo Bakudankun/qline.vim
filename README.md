@@ -32,11 +32,6 @@ spoiler.
 <summary>Example configuration</summary>
 
 ```vim
-" Import useful functions bundled in qline.vim.
-" Make sure that the path to qline.vim is set in &runtimepath by here.
-" Ex. Do `packadd! qline.vim` if you install qline as a Vim package.
-import {GetBufVar, WinEval} from 'qline/util.vim'
-
 " Define a :def function to use Vim9 syntax and compiled lambdas in a legacy
 " Vim script.
 def s:qline_config()
@@ -76,44 +71,45 @@ def s:qline_config()
 # If its content is a Funcref, it is evaluated before parsing the statusline.
 # If visible_condition results in Falsy, or the content results in empty string,
 # the component is disabled.
-# Note that Funcrefs are evaluated in context of the window where the cursor is in,
-# not the window of the constructing status line.
+# Funcrefs are evaluated in the context of the window of the drawing status line.
+# Note that in Vim9, functions cannot use non-autoload functions that is later
+# defined. Use `eval()` to work around.
     component: #{
       fileinfo: #{
-        content: {winid ->
-          (GetBufVar('&fenc') || &enc) .. ' ' ..
-          WinEval('nerdfont#fileformat#find()') ..
-          (GetBufVar('&bomb') ? "\U1f4a3" : '')
+        content: {->
+          (&fenc || &enc) .. ' ' ..
+          nerdfont#fileformat#find() ..
+          (&bomb ? "\U1f4a3" : '')
         },
-        visible_condition: {winid -> !GetBufVar('&buftype')}
+        visible_condition: {-> !&buftype}
       },
       bufstate: #{
-        content: {winid ->
-          (GetBufVar('&readonly') ? "\uf023" : '') ..
-          (GetBufVar('&modifiable') ? '' : "\uf05e") ..
-          (GetBufVar('&modified') ? "\uf040" : '')
+        content: {->
+          (&readonly ? "\uf023" : '') ..
+          (&modifiable ? '' : "\uf05e") ..
+          (&modified ? "\uf040" : '')
         },
       },
       bufnum: #{
         highlight: 'StatusLine',
       },
       filetype: #{
-        content: '%{nerdfont#find()}',
+        content: {-> nerdfont#find()},
       },
       fugitive: #{
-        content: {winid ->
-          WinEval('FugitiveStatusline()')
+        content: {->
+          eval('FugitiveStatusline()')
             ->substitute('\[GIT(\(.*\))]\|\[GIT:\(.*\)(.*)]', "\ue0a0\\1\\2", '')
         },
       },
       gitgutter: #{
-        content: {winid ->
-          WinEval('GitGutterGetHunkSummary()')->copy()
+        content: {->
+          eval('GitGutterGetHunkSummary()')->copy()
             ->map({idx, val -> val ? ['+', '~', '-'][idx] .. val : ''})
             ->filter({_, val -> val})
             ->join()
         },
-        visible_condition: {winid -> WinEval('GitGutterGetHunks()')},
+        visible_condition: {-> eval('GitGutterGetHunks()')},
       },
     },
   }
