@@ -1,7 +1,7 @@
 vim9script
 
 
-export let palette: dict<dict<list<string>>> = #{
+export const palette: dict<dict<list<string>>> = #{
   normal: #{
     left0:   ['#005f00', '#afdf00', '22', '148', 'bold'],
     left1:   ['#ffffff', '#585858', '231', '240'],

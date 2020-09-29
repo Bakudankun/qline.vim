@@ -31,12 +31,12 @@ def qline#statusline(): string
 enddef
 
 
-let wascmdline: bool = false
+var wascmdline: bool = false
 export def OnSafeState()
   # Redraw statusline on entering commandline.
   # Using CmdlineEnter has side effect that clears command output when
   # entering command line mode in succession.
-  let iscmdline: bool = mode() ==# 'c'
+  const iscmdline: bool = mode() ==# 'c'
   if iscmdline && !wascmdline
     redrawstatus
   endif

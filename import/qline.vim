@@ -32,12 +32,12 @@ export def Statusline(): string
   const mode: string = type ==# 'inactive' ? 'inactive'
     : mode_strings->get(mode(), 'normal')
 
-  let statusline: dict<string> = {left: '', right: ''}
+  final statusline: dict<string> = {left: '', right: ''}
   const margin: string = Get('separator.margin', mode)
 
   for side in [left, right]
-    let components_list: list<list<string>> = Get(side, mode)
-    let components: list<dict<any>> = []
+    const components_list: list<list<string>> = Get(side, mode)
+    final components: list<dict<any>> = []
     for tier in range(len(components_list))
       for name in components_list[tier]
         components->add(GetComponent(name, side .. tier))
@@ -47,7 +47,7 @@ export def Statusline(): string
     components->filter({_, val -> val})
 
     # # Closure in closure does not work for now.
-    # let components: list<dict<any>> = Get(side, mode)
+    # const components: list<dict<any>> = Get(side, mode)
     #   ->deepcopy()
     #   ->map({tier, list -> list->map({_, name -> GetComponent(name, side .. tier)})})
     #   ->flatten()
@@ -73,8 +73,8 @@ export def Statusline(): string
         break
       endif
 
-      let current_hl = components[index].highlight
-      let next_hl = components[index + 1].highlight
+      const current_hl = components[index].highlight
+      const next_hl = components[index + 1].highlight
 
       if current_hl !=# next_hl
         const actual_separator: string = separator &&
@@ -106,17 +106,17 @@ enddef
 def GetComponent(name: string, highlight: string): dict<any>
   import ColorExists from './qline/colorscheme.vim'
 
-  let content: string = name->GetComponentContent()
+  const content: string = name->GetComponentContent()
   if !content
     return {}
   endif
 
-  let component = Get('component.' .. name)
+  const component = Get('component.' .. name)
   if component->type() != v:t_dict
     return #{content: content, highlight: highlight}
   endif
 
-  let ret = component->deepcopy()
+  final ret = component->deepcopy()
   ret['content'] = content
   if !ret->has_key('highlight') || !ColorExists(ret.highlight)
     ret['highlight'] = highlight
@@ -127,7 +127,7 @@ enddef
 
 
 export def GetComponentContent(name: string): string
-  let components: dict<any> = Get('component')
+  const components: dict<any> = Get('component')
 
   if !components->has_key(name)
     return name =~# '^\s*%' ? name : ''
@@ -140,7 +140,7 @@ export def GetComponentContent(name: string): string
   elseif type(Component) == v:t_func
     return '' .. WinCall(Component)
   elseif type(Component) == v:t_dict
-    let visible: bool = false
+    var visible: bool = false
     if !Component->has_key('visible_condition')
       # Assume the component is always visible if visible_condition is not set.
       visible = true
@@ -173,8 +173,8 @@ export def GetComponentContent(name: string): string
 enddef
 
 
-let win_call_ret: any = 0
-let WinCallFunc: func
+var win_call_ret: any = 0
+var WinCallFunc: func
 def WinCall(Func: func): any
   WinCallFunc = Func
   win_execute(g:statusline_winid, 's:win_call_ret = s:WinCallFunc()')

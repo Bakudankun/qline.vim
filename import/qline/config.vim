@@ -1,6 +1,6 @@
 vim9script
 
-let initialized: bool = false
+var initialized: bool = false
 
 
 # Extend dictionaries recursively.
@@ -40,8 +40,10 @@ export def Get(query: string, mode: string = ''): any
     Init()
   endif
 
+  var varname: string
+
   if mode
-    let varname: string = 'g:qline_config.' .. mode .. '.' .. query
+    varname = 'g:qline_config.' .. mode .. '.' .. query
 
     if exists(varname)
       return eval(varname)
@@ -56,7 +58,7 @@ export def Get(query: string, mode: string = ''): any
     endif
   endif
 
-  let varname = 'g:qline_config.' .. query
+  varname = 'g:qline_config.' .. query
 
   if exists(varname)
     return eval(varname)
