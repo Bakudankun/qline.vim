@@ -37,7 +37,7 @@ def SearchCount_Content(): string
 enddef
 
 
-export const! default_config = #{
+export const default_config = #{
   manual: false,
   active: #{
     left: [
