@@ -24,9 +24,8 @@ with some differences. After loading, the dictionary will be "merged" with the
 default configuration, so you can check `g:qline_config` to see the current
 configuration at any time.
 
-The default configuration is written in the [config.vim](import/qline/config.vim)
-file. The example configuration which is part of mine is in the following
-spoiler.
+The default value is written [here](import/qline/config/default.vim). The
+example configuration which is part of mine is in the following spoiler.
 
 <details>
 <summary>Example configuration</summary>
@@ -46,7 +45,7 @@ def s:qline_config()
 # Each modes can also have specific settings.
     active: #{
       left: [
-        ['bufnum', 'mode', 'paste'],
+        ['mode', 'paste'],
         ['gina_branch', 'gina_traffic', 'gina_status', 'filename', 'gitgutter'],
         ['bufstate']
       ],
@@ -57,7 +56,7 @@ def s:qline_config()
       ]
     },
     inactive: #{
-      left: [['bufnum', 'filename', 'gitgutter'], ['bufstate']],
+      left: [['filename', 'gitgutter'], ['bufstate']],
       right: [['filetype'], ['fileinfo']],
       separator: #{left: '', right: '', margin: ' '},
       subseparator: #{left: '|', right: '|', margin: ' '},
@@ -73,7 +72,7 @@ def s:qline_config()
 # Define components. You can overwrite or append to the default definitions.
 # If its content is a Funcref, it is evaluated before parsing the statusline.
 # If visible_condition results in Falsy, or the content results in empty string,
-# the component is disabled.
+# the component is collapsed.
 # Funcrefs are evaluated in the context of the window of the drawing status line.
 # Note that in Vim9, functions cannot use non-autoload functions that is later
 # defined. Use `eval()` to work around.
@@ -92,9 +91,6 @@ def s:qline_config()
           (&modifiable ? '' : "\uf05e") ..
           (&modified ? "\uf040" : '')
         },
-      },
-      bufnum: #{
-        highlight: 'StatusLine',
       },
       filetype: #{
         content: {-> nerdfont#find()},
