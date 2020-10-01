@@ -21,7 +21,7 @@ const mode_strings: dict<string> = {
 
 
 export def Statusline(): string
-  :doautocmd User QlineUpdate
+  :doautocmd <nomodeline> User QlineUpdate
 
   import GetHighlight from './qline/colorscheme.vim'
 
