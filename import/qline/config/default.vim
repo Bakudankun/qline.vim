@@ -83,7 +83,7 @@ export const default_config = #{
     },
     keymap: #{
       content: '%k',
-      visible_condition: {-> &keymap},
+      visible_condition: {-> !!&keymap},
     },
     bufnum: #{
       content: '%n',
@@ -104,13 +104,13 @@ export const default_config = #{
       content: '%B',
     },
     fileencoding: #{
-      content: {-> &fenc || &enc},
+      content: {-> &fenc ?? &enc},
     },
     fileformat: #{
       content: '%{&ff}',
     },
     filetype: #{
-      content:  {-> &ft || "no ft"},
+      content:  {-> &ft ?? "no ft"},
     },
     percent: #{
       content: '%3p%%',
@@ -120,7 +120,7 @@ export const default_config = #{
     },
     spell: #{
       content: '%{&spelllang}',
-      visible_condition: {-> &spell && &spelllang},
+      visible_condition: {-> &spell && !!&spelllang},
     },
     lineinfo: #{
       content: '%3l:%-2v',

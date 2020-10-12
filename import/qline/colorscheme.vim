@@ -48,7 +48,7 @@ enddef
 
 export def ColorExists(name: string): bool
   const palette = GetPalette()
-  return palette && palette.normal->has_key(name) || hlexists(name)
+  return !!palette && palette.normal->has_key(name) || hlexists(name)
 enddef
 
 
@@ -70,7 +70,7 @@ def GetHighlightName(mode: string,
                      tier: string,
                      nexttier: string = ''): string
   final dirs: list<any> = [mode, tier]
-  if nexttier
+  if !!nexttier
     dirs->add(nexttier)
   endif
 
@@ -212,7 +212,7 @@ def DefineHighlight(mode: string,
 
   const mode_palette = palette->get(mode, palette.normal)
 
-  for color in [tier, nexttier]->filter({_, val -> val})
+  for color in [tier, nexttier]->filter({_, val -> !!val})
     if mode_palette->has_key(color)
       continue
     endif
@@ -260,11 +260,11 @@ def DefineHighlight(mode: string,
 
   :execute printf('highlight %s %s %s %s %s %s',
                   name,
-                  guifg && 'guifg=' .. guifg,
-                  guibg && 'guibg=' .. guibg,
-                  ctermfg && 'ctermfg=' .. ctermfg,
-                  ctermbg && 'ctermbg=' .. ctermbg,
-                  attr && 'gui=' .. attr .. ' term=' .. attr)
+                  !guifg   ? '' : 'guifg=' .. guifg,
+                  !guibg   ? '' : 'guibg=' .. guibg,
+                  !ctermfg ? '' : 'ctermfg=' .. ctermfg,
+                  !ctermbg ? '' : 'ctermbg=' .. ctermbg,
+                  !attr    ? '' : 'gui=' .. attr .. ' term=' .. attr)
   defined_highlights->add(name)
 enddef
 
@@ -276,16 +276,16 @@ def ConvertHighlight(name: string): list<string>
   var ctermfg = hlid->synIDattr('fg', 'cterm')
   var ctermbg = hlid->synIDattr('bg', 'cterm')
   const attr = ['bold', 'italic', 'standout', 'underline', 'undercurl', 'strike']
-    ->map({idx, val -> hlid->synIDattr(val) && (idx == 7 ? 'strikethrough' : val)})
-    ->filter({_, val -> val})->join(',')
+    ->map({idx, val -> !hlid->synIDattr(val) ? '' : (idx == 7 ? 'strikethrough' : val)})
+    ->filter({_, val -> !!val})->join(',')
 
-  if hlid->synIDattr('reverse', 'gui')
+  if !!hlid->synIDattr('reverse', 'gui')
     var buf = guifg
     guifg = guibg
     guibg = buf
   endif
 
-  if hlid->synIDattr('reverse', 'cterm')
+  if !!hlid->synIDattr('reverse', 'cterm')
     var buf = ctermfg
     ctermfg = ctermbg
     ctermbg = buf

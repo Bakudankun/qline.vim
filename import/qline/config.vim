@@ -42,7 +42,7 @@ export def Get(query: string, mode: string = ''): any
 
   var varname: string
 
-  if mode
+  if !!mode
     varname = 'g:qline_config.' .. mode .. '.' .. query
 
     if exists(varname)

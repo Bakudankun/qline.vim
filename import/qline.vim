@@ -44,14 +44,14 @@ export def Statusline(): string
       endfor
     endfor
 
-    components->filter({_, val -> val})
+    components->filter({_, val -> !!val})
 
     # # Closure in closure does not work for now.
     # const components: list<dict<any>> = Get(side, mode)
     #   ->deepcopy()
     #   ->map({tier, list -> list->map({_, name -> GetComponent(name, side .. tier)})})
     #   ->flatten()
-    #   ->filter({_, val -> val})
+    #   ->filter({_, val -> !!val})
 
     if !components
       continue
@@ -77,10 +77,10 @@ export def Statusline(): string
       const next_hl = components[index + 1].highlight
 
       if current_hl !=# next_hl
-        const actual_separator: string = separator &&
+        const highlighted_separator: string = !separator ? '' :
           (side ==# left ? GetHighlight(mode, current_hl, next_hl)
                          : GetHighlight(mode, next_hl, current_hl)) .. separator
-        statusline[side] = statusline[side] .. margin .. actual_separator ..
+        statusline[side] = statusline[side] .. margin .. highlighted_separator ..
                            GetHighlight(mode, next_hl) .. margin
       else
         statusline[side] = statusline[side] .. subseparator
@@ -90,7 +90,7 @@ export def Statusline(): string
     statusline[side] = GetHighlight(mode, components[0].highlight) .. margin ..
                        statusline[side] .. margin
 
-    if separator && components->len() > 0
+    if !!separator && components->len() > 0
       if side ==# left
         statusline[side] = statusline[side] .. GetHighlight(mode, components[-1].highlight, 'middle') .. separator
       else
