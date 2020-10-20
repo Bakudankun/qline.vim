@@ -111,7 +111,7 @@ def s:qline_config()
       gitgutter: #{
         content: {->
           eval('GitGutterGetHunkSummary()')->copy()
-            ->map({idx, val -> !val ? '' ['+', '~', '-'][idx] .. val})
+            ->map({idx, val -> !val ? '' : ['+', '~', '-'][idx] .. val})
             ->filter({_, val -> !!val})
             ->join()
         },
@@ -140,7 +140,7 @@ Note that some components use followings:
 ## Colorschemes?
 
 Currently the only default colorscheme is bundled, since Vim9 can't `:import`
-from dinamic paths at the moment.
+from dynamic paths at the moment.
 
 Instead, you can import colorschemes from
 [vim-airline](https://github.com/vim-airline/vim-airline)
