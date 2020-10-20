@@ -36,22 +36,7 @@ export def Statusline(): string
   const margin: string = Get('separator.margin', mode)
 
   for side in [left, right]
-    const components_list: list<list<string>> = Get(side, mode)
-    final components: list<dict<any>> = []
-    for tier in range(len(components_list))
-      for name in components_list[tier]
-        components->add(GetComponent(name, side .. tier))
-      endfor
-    endfor
-
-    components->filter({_, val -> !!val})
-
-    # # Closure in closure does not work for now.
-    # const components: list<dict<any>> = Get(side, mode)
-    #   ->deepcopy()
-    #   ->map({tier, list -> list->map({_, name -> GetComponent(name, side .. tier)})})
-    #   ->flatten()
-    #   ->filter({_, val -> !!val})
+    final components: list<dict<any>> = WinCall(function(GetComponents, [mode, side]))
 
     if !components
       continue
@@ -103,6 +88,26 @@ export def Statusline(): string
 enddef
 
 
+def GetComponents(mode: string, side: string): list<dict<any>>
+  const components_list: list<list<string>> = Get(side, mode)
+  final components: list<dict<any>> = []
+  for tier in range(len(components_list))
+    for name in components_list[tier]
+      components->add(GetComponent(name, side .. tier))
+    endfor
+  endfor
+
+  return components->filter({_, val -> !!val})
+
+  # # Closure in closure does not work for now.
+  # const components: list<dict<any>> = Get(side, mode)
+  #   ->deepcopy()
+  #   ->map({tier, list -> list->map({_, name -> GetComponent(name, side .. tier)})})
+  #   ->flatten()
+  #   ->filter({_, val -> !!val})
+enddef
+
+
 def GetComponent(name: string, highlight: string): dict<any>
   import ColorExists from './qline/colorscheme.vim'
 
@@ -138,7 +143,7 @@ export def GetComponentContent(name: string): string
   if type(Component) == v:t_string
     return Component
   elseif type(Component) == v:t_func
-    return '' .. WinCall(Component)
+    return '' .. Component()
   elseif type(Component) == v:t_dict
     var visible: bool = false
     if !Component->has_key('visible_condition')
@@ -146,7 +151,7 @@ export def GetComponentContent(name: string): string
       visible = true
     elseif type(Component.visible_condition) == v:t_func
       try
-        visible = !!WinCall(Component.visible_condition)
+        visible = !!Component.visible_condition()
       catch
         return '#ERROR#'
       endtry
@@ -162,7 +167,7 @@ export def GetComponentContent(name: string): string
       return Component.content
     elseif type(Component.content) == v:t_func
       try
-        return '' .. WinCall(Component.content)
+        return '' .. Component.content()
       catch
         return '#ERROR#'
       endtry
