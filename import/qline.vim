@@ -182,6 +182,9 @@ enddef
 var win_call_ret: any = 0
 var WinCallFunc: func
 def WinCall(winid: number, Func: func): any
+  if winid == g:actual_curwin
+    return Func()
+  endif
   WinCallFunc = Func
   win_execute(winid, 's:win_call_ret = s:WinCallFunc()')
   return win_call_ret
