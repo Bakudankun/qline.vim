@@ -28,7 +28,8 @@ export def Statusline(): string
   g:actual_curbuf = bufnr()
   g:actual_curwin = win_getid()
 
-  const type: string = g:statusline_winid == win_getid() ? 'active' : 'inactive'
+  const winid: number = g:->get('statusline_winid', g:actual_curwin)
+  const type: string = winid == g:actual_curwin ? 'active' : 'inactive'
   const mode: string = type ==# 'inactive' ? 'inactive'
     : mode_strings->get(mode(), 'normal')
 
@@ -36,7 +37,7 @@ export def Statusline(): string
   const margin: string = Get('separator.margin', mode)
 
   for side in [left, right]
-    final components: list<dict<any>> = WinCall(function(GetComponents, [mode, side]))
+    final components: list<dict<any>> = WinCall(winid, function(GetComponents, [mode, side]))
 
     if !components
       continue
@@ -180,9 +181,9 @@ enddef
 
 var win_call_ret: any = 0
 var WinCallFunc: func
-def WinCall(Func: func): any
+def WinCall(winid: number, Func: func): any
   WinCallFunc = Func
-  win_execute(g:statusline_winid, 's:win_call_ret = s:WinCallFunc()')
+  win_execute(winid, 's:win_call_ret = s:WinCallFunc()')
   return win_call_ret
 enddef
 
