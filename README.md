@@ -3,7 +3,7 @@
 The quick, fully-customizable status line plugin written in cutting-edge Vim9
 script.
 
-![Demo](https://user-images.githubusercontent.com/4504807/94335198-e36f4c00-0014-11eb-9c48-b7a39463688a.gif)
+![Demo](https://user-images.githubusercontent.com/4504807/96721994-db25e900-13e7-11eb-9628-0e774392227e.gif)
 
 
 ## Requirement
@@ -20,9 +20,9 @@ Do not use this plugin regularly.
 
 Every configurations are stored in a dictionary named `g:qline_config`. Its
 format is like [lightline.vim](https://github.com/itchyny/lightline.vim) but
-with some differences. After loading, the dictionary will be "merged" with the
-default configuration, so you can check `g:qline_config` to see the current
-configuration at any time.
+with some differences. On loading qline.vim, the dictionary will be "merged"
+with the default configuration, so you can check `g:qline_config` to see the
+current configuration at any time.
 
 The default value is written [here](import/qline/config/default.vim). The
 example configuration which is part of mine is in the following spoiler.
@@ -168,8 +168,8 @@ or use `:QlineColorscheme` to change the colorscheme.
 
 ## Troubleshooting
 
-### qline is disabled occasionally.
+### qline.vim has been disabled for some reason.
 
-When qline runs into an error, qline may be disabled forcibly by Vim.
-`:call qline#enable()` to re-enable qline.
+When qline.vim runs into an error, qline.vim may be disabled forcibly by Vim.
+`:call qline#enable()` to re-enable.
 
