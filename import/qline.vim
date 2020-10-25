@@ -164,15 +164,23 @@ export def GetComponentContent(name: string): string
       return ''
     endif
 
+    var content: string = ''
+
     if type(Component.content) == v:t_string
-      return Component.content
+      content = Component.content
     elseif type(Component.content) == v:t_func
       try
-        return '' .. Component.content()
+        content = '' .. Component.content()
       catch
         return '#ERROR#'
       endtry
     endif
+
+    if !!Component->get('escape')
+      return content->substitute('%', '%%', 'g')
+    endif
+
+    return content
   endif
 
   return ''
