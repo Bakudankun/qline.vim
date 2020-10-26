@@ -107,7 +107,7 @@ export const default_config = #{
       content: {-> &fenc ?? &enc},
     },
     fileformat: #{
-      content: '%{&ff}',
+      content: {-> &ff},
     },
     filetype: #{
       content:  {-> &ft ?? "no ft"},
@@ -119,7 +119,7 @@ export const default_config = #{
       content: '%P',
     },
     spell: #{
-      content: '%{&spelllang}',
+      content: {-> &spelllang},
       visible_condition: {-> &spell && !!&spelllang},
     },
     lineinfo: #{
@@ -135,7 +135,7 @@ export const default_config = #{
       content: '%999X X ',
     },
     winnr: #{
-      content: '%{winnr()}',
+      content: {-> winnr()},
     },
     truncation: #{
       content: '%<',
