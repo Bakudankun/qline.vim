@@ -48,9 +48,26 @@ export def Statusline(): string
     endif
 
     const separator: string = Get('separator.' .. side, mode)
-    const subseparator: string = Get('subseparator.margin', mode) ..
-                                 Get('subseparator.' .. side, mode) ..
-                                 Get('subseparator.margin', mode)
+    var subseparator: string = side ==# left ? Get('subseparator.' .. side, mode)
+                                             : Get('subseparator.' .. side, mode)
+    const submargin: string = Get('subseparator.margin', mode)
+    if side ==# left
+      if submargin ==# 'INSIDE' || submargin ==# 'RIGHT'
+        subseparator = subseparator .. ' '
+      elseif submargin ==# 'OUTSIDE' || submargin ==# 'LEFT'
+        subseparator = ' ' .. subseparator
+      else
+        subseparator = submargin .. subseparator .. submargin
+      endif
+    else
+      if submargin ==# 'OUTSIDE' || submargin ==# 'RIGHT'
+        subseparator = subseparator .. ' '
+      elseif submargin ==# 'INSIDE' || submargin ==# 'LEFT'
+        subseparator = ' ' .. subseparator
+      else
+        subseparator = submargin .. subseparator .. submargin
+      endif
+    endif
 
     for index in range(len(components))
       statusline[side] = statusline[side] .. components[index].content
@@ -63,18 +80,34 @@ export def Statusline(): string
       const next_hl = components[index + 1].highlight
 
       if current_hl !=# next_hl
-        const highlighted_separator: string = !separator ? '' :
+        const highlighted_separator: string = !separator ? GetHighlight(mode, next_hl) :
           (side ==# left ? GetHighlight(mode, current_hl, next_hl)
-                         : GetHighlight(mode, next_hl, current_hl)) .. separator
-        statusline[side] = statusline[side] .. margin .. highlighted_separator ..
-                           GetHighlight(mode, next_hl) .. margin
+                         : GetHighlight(mode, next_hl, current_hl)) .. separator .. GetHighlight(mode, next_hl)
+        if side ==# left
+          if margin ==# 'INSIDE' || margin ==# 'RIGHT'
+            statusline[side] = statusline[side] .. highlighted_separator .. ' '
+          elseif margin ==# 'OUTSIDE' || margin ==# 'LEFT'
+            statusline[side] = statusline[side] .. ' ' .. highlighted_separator
+          else
+            statusline[side] = statusline[side] .. margin .. highlighted_separator .. margin
+          endif
+        else
+          if margin ==# 'OUTSIDE' || margin ==# 'RIGHT'
+            statusline[side] = statusline[side] .. highlighted_separator .. ' '
+          elseif margin ==# 'INSIDE' || margin ==# 'LEFT'
+            statusline[side] = statusline[side] .. ' ' .. highlighted_separator
+          else
+            statusline[side] = statusline[side] .. margin .. highlighted_separator .. margin
+          endif
+        endif
       else
         statusline[side] = statusline[side] .. subseparator
       endif
     endfor
 
-    statusline[side] = GetHighlight(mode, components[0].highlight) .. margin ..
-                       statusline[side] .. margin
+    const globmargin: string = margin =~# '\v^(INSIDE|OUTSIDE|LEFT|RIGHT)$' ? ' ' : margin
+    statusline[side] = GetHighlight(mode, components[0].highlight) .. globmargin ..
+                       statusline[side] .. globmargin
 
     if !!separator && components->len() > 0
       if side ==# left
