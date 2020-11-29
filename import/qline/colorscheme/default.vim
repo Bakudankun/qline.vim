@@ -1,8 +1,8 @@
 vim9script
 
 
-export const palette: dict<dict<list<string>>> = #{
-  normal: #{
+export const palette: dict<dict<list<string>>> = {
+  normal: {
     left0:   ['#005f00', '#afdf00', '22', '148', 'bold'],
     left1:   ['#ffffff', '#585858', '231', '240'],
     left2:   ['#8a8a8a', '#303030', '245', '236'],
@@ -14,7 +14,7 @@ export const palette: dict<dict<list<string>>> = #{
     warning: ['#262626', '#b58900', '235', '136'],
     paste:   ['#ffffff', '#d75f00', '231', '166', 'bold'],
   },
-  inactive: #{
+  inactive: {
     left0:  ['#585858', '#262626', '240', '235'],
     left1:  ['#585858', '#121212', '240', '233'],
     left2:  ['#8a8a8a', '#303030', '245', '236'],
@@ -23,7 +23,7 @@ export const palette: dict<dict<list<string>>> = #{
     right1: ['#585858', '#262626', '240', '235'],
     right2: ['#585858', '#121212', '240', '233'],
   },
-  replace: #{
+  replace: {
     left0:  ['#ffffff', '#df0000', '231', '160', 'bold'],
     left1:  ['#ffffff', '#585858', '231', '240'],
     left2:  ['#8a8a8a', '#303030', '245', '236'],
@@ -32,13 +32,13 @@ export const palette: dict<dict<list<string>>> = #{
     right1: ['#bcbcbc', '#585858', '250', '240'],
     right2: ['#9e9e9e', '#303030', '247', '236'],
   },
-  tabline: #{
+  tabline: {
     left:   ['#bcbcbc', '#585858', '250', '240'],
     middle: ['#303030', '#9e9e9e', '236', '247'],
     right:  ['#bcbcbc', '#4e4e4e', '250', '239'],
     tabsel: ['#bcbcbc', '#262626', '250', '235'],
   },
-  visual: #{
+  visual: {
     left0:  ['#870000', '#ff8700', '88', '208', 'bold'],
     left1:  ['#ffffff', '#585858', '231', '240'],
     left2:  ['#8a8a8a', '#303030', '245', '236'],
@@ -47,7 +47,7 @@ export const palette: dict<dict<list<string>>> = #{
     right1: ['#bcbcbc', '#585858', '250', '240'],
     right2: ['#9e9e9e', '#303030', '247', '236'],
   },
-  insert: #{
+  insert: {
     left0:  ['#005f5f', '#ffffff', '23', '231', 'bold'],
     left1:  ['#ffffff', '#0087af', '231', '31'],
     left2:  ['#87dfff', '#005f87', '117', '24'],
@@ -56,7 +56,7 @@ export const palette: dict<dict<list<string>>> = #{
     right1: ['#87dfff', '#0087af', '117', '31'],
     right2: ['#87dfff', '#005f87', '117', '24'],
   },
-  terminal: #{
+  terminal: {
     left0:  ['#005f5f', '#ffffff', '23', '231', 'bold'],
     left1:  ['#ffffff', '#0087af', '231', '31'],
     left2:  ['#87dfff', '#005f87', '117', '24'],

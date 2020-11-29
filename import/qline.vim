@@ -6,17 +6,17 @@ const left = 'left'
 const right = 'right'
 
 const mode_strings: dict<string> = {
-  'n':      'normal',
-  'v':      'visual',
-  'V':      'visual',
-  "\<C-V>": 'visual',
-  's':      'visual',
-  'S':      'visual',
-  "\<C-S>": 'visual',
-  'i':      'insert',
-  'R':      'replace',
-  't':      'terminal',
-  'c':      'commandline',
+  n:          'normal',
+  v:          'visual',
+  V:          'visual',
+  ["\<C-V>"]: 'visual',
+  s:          'visual',
+  S:          'visual',
+  ["\<C-S>"]: 'visual',
+  i:          'insert',
+  R:          'replace',
+  t:          'terminal',
+  c:          'commandline',
 }
 
 
@@ -152,13 +152,13 @@ def GetComponent(name: string, highlight: string): dict<any>
 
   const component = Get('component.' .. name)
   if component->type() != v:t_dict
-    return #{content: content, highlight: highlight}
+    return {content: content, highlight: highlight}
   endif
 
   final ret = component->deepcopy()
-  ret['content'] = content
+  ret.content = content
   if !ret->has_key('highlight') || !ColorExists(ret.highlight)
-    ret['highlight'] = highlight
+    ret.highlight = highlight
   endif
 
   return ret

@@ -18,7 +18,7 @@ enddef
 
 
 def SearchCount_Content(): string
-  const result: dict<number> = searchcount(#{recompute: true})
+  const result: dict<number> = searchcount({recompute: true})
   if !result
     return ''
   endif
@@ -37,9 +37,9 @@ def SearchCount_Content(): string
 enddef
 
 
-export const default_config = #{
+export const default_config = {
   manual: false,
-  active: #{
+  active: {
     left: [
       ['mode', 'paste'],
       ['filename'],
@@ -51,7 +51,7 @@ export const default_config = #{
       ['filetype', 'fileencoding', 'fileformat'],
     ],
   },
-  inactive: #{
+  inactive: {
     left: [
       ['filename'],
     ],
@@ -60,124 +60,124 @@ export const default_config = #{
       ['percent'],
     ],
   },
-  tabline: #{
+  tabline: {
     left: [['tabs']],
     right: [['close']],
   },
-  component: #{
-    mode: #{
+  component: {
+    mode: {
       content: Mode_Content,
     },
-    absolutepath: #{
+    absolutepath: {
       content: '%F',
     },
-    relativepath: #{
+    relativepath: {
       content: '%f',
     },
-    filename: #{
+    filename: {
       content: '%t',
     },
-    modified: #{
+    modified: {
       content: '%M',
       visible_condition: {-> &modified || !&modifiable},
     },
-    keymap: #{
+    keymap: {
       content: '%k',
       visible_condition: {-> !!&keymap},
     },
-    bufnum: #{
+    bufnum: {
       content: '%n',
     },
-    paste: #{
+    paste: {
       content: 'PASTE',
       visible_condition: {-> &paste},
       highlight: 'paste',
     },
-    readonly: #{
+    readonly: {
       content: '%R',
       visible_condition: {-> &readonly},
     },
-    charvalue: #{
+    charvalue: {
       content: '%b',
     },
-    charvaluehex: #{
+    charvaluehex: {
       content: '%B',
     },
-    fileencoding: #{
+    fileencoding: {
       content: {-> &fenc ?? &enc},
     },
-    fileformat: #{
+    fileformat: {
       content: {-> &ff},
     },
-    filetype: #{
+    filetype: {
       content:  {-> &ft ?? "no ft"},
     },
-    percent: #{
+    percent: {
       content: '%3p%%',
     },
-    percentwin: #{
+    percentwin: {
       content: '%P',
     },
-    spell: #{
+    spell: {
       content: {-> &spelllang},
       visible_condition: {-> &spell && !!&spelllang},
     },
-    lineinfo: #{
+    lineinfo: {
       content: '%3l:%-2v',
     },
-    line: #{
+    line: {
       content: '%l',
     },
-    column: #{
+    column: {
       content: '%c',
     },
-    close: #{
+    close: {
       content: '%999X X ',
     },
-    winnr: #{
+    winnr: {
       content: {-> winnr()},
     },
-    truncation: #{
+    truncation: {
       content: '%<',
       raw: true,
     },
-    searchcount: #{
+    searchcount: {
       content: SearchCount_Content,
       visible_condition: {-> v:hlsearch},
     },
   },
   colorscheme: 'default',
-  separator: #{
+  separator: {
     left: '',
     right: '',
     margin: ' ',
   },
-  subseparator: #{
+  subseparator: {
     left: ' | ',
     right: ' | ',
     margin: '',
   },
   mode_map: {
-    'n':      'NORMAL',
-    'niI':    'I-NORMAL',
-    'niR':    'R-NORMAL',
-    'niV':    'R-NORMAL',
-    'v':      'VISUAL',
-    'V':      'V-LINE',
-    "\<C-V>": 'V-BLOCK',
-    's':      'SELECT',
-    'S':      'S-LINE',
-    "\<C-S>": 'S-BLOCK',
-    'i':      'INSERT',
-    'R':      'REPLACE',
-    't':      'TERMINAL',
-    ':':      'COMMAND',
-    '>':      'DEBUG',
-    '/':      'SEARCH',
-    '?':      'SEARCH',
-    '@':      'PROMPT',
-    '-':      'EX-INSERT',
-    '=':      'EXPR',
+    n:          'NORMAL',
+    niI:        'I-NORMAL',
+    niR:        'R-NORMAL',
+    niV:        'R-NORMAL',
+    v:          'VISUAL',
+    V:          'V-LINE',
+    ["\<C-V>"]: 'V-BLOCK',
+    s:          'SELECT',
+    S:          'S-LINE',
+    ["\<C-S>"]: 'S-BLOCK',
+    i:          'INSERT',
+    R:          'REPLACE',
+    t:          'TERMINAL',
+    [':']:      'COMMAND',
+    ['>']:      'DEBUG',
+    ['/']:      'SEARCH',
+    ['?']:      'SEARCH',
+    ['@']:      'PROMPT',
+    ['-']:      'EX-INSERT',
+    ['=']:      'EXPR',
   },
 }
 
