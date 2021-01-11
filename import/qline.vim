@@ -131,14 +131,14 @@ def GetComponents(mode: string, side: string): list<dict<any>>
     endfor
   endfor
 
-  return components->filter({_, val -> !!val})
+  return components->filter((_, val) => !!val)
 
   # # Closure in closure does not work for now.
   # const components: list<dict<any>> = Get(side, mode)
   #   ->deepcopy()
-  #   ->map({tier, list -> list->map({_, name -> GetComponent(name, side .. tier)})})
+  #   ->map((tier, list) => list->map((_, name) => GetComponent(name, side .. tier)))
   #   ->flatten()
-  #   ->filter({_, val -> !!val})
+  #   ->filter((_, val) => !!val)
 enddef
 
 

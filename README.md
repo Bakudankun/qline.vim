@@ -78,25 +78,23 @@ def s:qline_config()
 # defined. Use `eval()` to work around.
     component: {
       fileinfo: {
-        content: {->
+        content: () =>
           (&fenc ?? &enc) .. ' ' ..
           nerdfont#fileformat#find() ..
-          (&bomb ? "\U1f4a3" : '')
-        },
-        visible_condition: {-> !&buftype}
+          (&bomb ? "\U1f4a3" : ''),
+        visible_condition: () => !&buftype,
       },
       bufstate: {
-        content: {->
+        content: () =>
           (&readonly ? "\uf023" : '') ..
           (&modifiable ? '' : "\uf05e") ..
-          (&modified ? "\uf040" : '')
-        },
+          (&modified ? "\uf040" : ''),
       },
       filetype: {
-        content: {-> nerdfont#find()},
+        content: () => nerdfont#find(),
       },
       gina_branch: {
-        content: {-> "\ue0a0" .. gina#component#repo#branch()},
+        content: () => "\ue0a0" .. gina#component#repo#branch(),
         visible_condition: function('gina#component#repo#branch'),
         highlight: 'Git',
       },
@@ -109,13 +107,12 @@ def s:qline_config()
         highlight: 'Git',
       },
       gitgutter: {
-        content: {->
+        content: () =>
           eval('GitGutterGetHunkSummary()')->copy()
-            ->map({idx, val -> !val ? '' : ['+', '~', '-'][idx] .. val})
-            ->filter({_, val -> !!val})
-            ->join()
-        },
-        visible_condition: {-> eval('GitGutterGetHunks()')},
+            ->map((idx, val) => !val ? '' : ['+', '~', '-'][idx] .. val)
+            ->filter((_, val) => !!val)
+            ->join(),
+        visible_condition: () => eval('GitGutterGetHunks()'),
       },
     },
   }

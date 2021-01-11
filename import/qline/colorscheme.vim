@@ -2,7 +2,7 @@ vim9script
 
 
 final palettes: dict<dict<dict<list<string>>>> = {}
-final current_colorscheme: string = ''
+var current_colorscheme: string = ''
 final defined_highlights: list<string> = []
 
 
@@ -42,7 +42,7 @@ enddef
 
 
 export def ResetHighlight()
-  defined_highlights = []
+  defined_highlights->filter(() => false)
 enddef
 
 
@@ -82,9 +82,9 @@ def LoadPalette(name: string)
   var palette: dict<dict<list<string>>> = {}
   try
     if name->stridx('lightline:') == 0
-      palette = ConvertLightlinePalette(name[10:])
+      palette = ConvertLightlinePalette(name[10 : ])
     elseif name->stridx('airline:') == 0
-      palette = ConvertAirlinePalette(name[8:])
+      palette = ConvertAirlinePalette(name[8 : ])
     elseif name ==# 'default'
       palette = GetOriginalPalette(name)
     endif
@@ -95,7 +95,10 @@ def LoadPalette(name: string)
     echoerr 'qline.vim: ERROR: colorscheme' name 'not found.'
     return
   endif
-  palettes[name] = palette
+  # cannot do:
+  # palettes[name] = palette
+  # bug of Vim?
+  palettes->extend({[name]: palette})
 enddef
 
 
@@ -143,7 +146,7 @@ enddef
 def GetAirlinePalette(name: string): dict<dict<list<string>>>
   try
     return eval('g:airline#themes#' .. name .. '#palette')->deepcopy()
-      ->map({_, category -> category->map({_, section -> section->map({_, val -> '' .. val})})})
+      ->map((_, category) => category->map((_, section) => section->map((_, val) => '' .. val)))
   catch
     throw 'qline.vim: ERROR: Airline palette "' .. name .. '" not found.'
   endtry
@@ -193,7 +196,7 @@ enddef
 def GetLightlinePalette(name: string): dict<dict<list<list<string>>>>
   try
     return eval('g:lightline#colorscheme#' .. name .. '#palette')->deepcopy()
-      ->map({_, mode -> mode->map({_, side -> side->map({_, tier -> tier->map({_, val -> '' .. val})})})})
+      ->map((_, mode) => mode->map((_, side) => side->map((_, tier) => tier->map((_, val) => '' .. val))))
   catch
     throw 'qline.vim: ERROR: Lightline palette "' .. name .. '" not found.'
   endtry
@@ -212,7 +215,7 @@ def DefineHighlight(mode: string,
 
   const mode_palette = palette->get(mode, palette.normal)
 
-  for color in [tier, nexttier]->filter({_, val -> !!val})
+  for color in [tier, nexttier]->filter((_, val) => !!val)
     if mode_palette->has_key(color)
       continue
     endif
@@ -276,8 +279,8 @@ def ConvertHighlight(name: string): list<string>
   var ctermfg = hlid->synIDattr('fg', 'cterm')
   var ctermbg = hlid->synIDattr('bg', 'cterm')
   const attr = ['bold', 'italic', 'standout', 'underline', 'undercurl', 'strike']
-    ->map({idx, val -> !hlid->synIDattr(val) ? '' : (idx == 7 ? 'strikethrough' : val)})
-    ->filter({_, val -> !!val})->join(',')
+    ->map((idx, val) => !hlid->synIDattr(val) ? '' : (idx == 7 ? 'strikethrough' : val))
+    ->filter((_, val) => !!val)->join(',')
 
   if !!hlid->synIDattr('reverse', 'gui')
     var buf = guifg

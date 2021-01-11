@@ -79,23 +79,23 @@ export const default_config = {
     },
     modified: {
       content: '%M',
-      visible_condition: {-> &modified || !&modifiable},
+      visible_condition: () => &modified || !&modifiable,
     },
     keymap: {
       content: '%k',
-      visible_condition: {-> !!&keymap},
+      visible_condition: () => !!&keymap,
     },
     bufnum: {
       content: '%n',
     },
     paste: {
       content: 'PASTE',
-      visible_condition: {-> &paste},
+      visible_condition: () => &paste,
       highlight: 'paste',
     },
     readonly: {
       content: '%R',
-      visible_condition: {-> &readonly},
+      visible_condition: () => &readonly,
     },
     charvalue: {
       content: '%b',
@@ -104,13 +104,13 @@ export const default_config = {
       content: '%B',
     },
     fileencoding: {
-      content: {-> &fenc ?? &enc},
+      content: () => &fenc ?? &enc,
     },
     fileformat: {
-      content: {-> &ff},
+      content: () => &ff,
     },
     filetype: {
-      content:  {-> &ft ?? "no ft"},
+      content:  () => &ft ?? "no ft",
     },
     percent: {
       content: '%3p%%',
@@ -119,8 +119,8 @@ export const default_config = {
       content: '%P',
     },
     spell: {
-      content: {-> &spelllang},
-      visible_condition: {-> &spell && !!&spelllang},
+      content: () => &spelllang,
+      visible_condition: () => &spell && !!&spelllang,
     },
     lineinfo: {
       content: '%3l:%-2v',
@@ -135,7 +135,7 @@ export const default_config = {
       content: '%999X X ',
     },
     winnr: {
-      content: {-> winnr()},
+      content: () => winnr(),
     },
     truncation: {
       content: '%<',
@@ -143,7 +143,7 @@ export const default_config = {
     },
     searchcount: {
       content: SearchCount_Content,
-      visible_condition: {-> v:hlsearch},
+      visible_condition: () => v:hlsearch,
     },
   },
   colorscheme: 'default',
