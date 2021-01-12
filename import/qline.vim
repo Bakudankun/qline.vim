@@ -123,22 +123,11 @@ enddef
 
 
 def GetComponents(mode: string, side: string): list<dict<any>>
-  const components_list: list<list<string>> = Get(side, mode)
-  final components: list<dict<any>> = []
-  for tier in range(len(components_list))
-    for name in components_list[tier]
-      components->add(GetComponent(name, side .. tier))
-    endfor
-  endfor
-
-  return components->filter((_, val) => !!val)
-
-  # # Closure in closure does not work for now.
-  # const components: list<dict<any>> = Get(side, mode)
-  #   ->deepcopy()
-  #   ->map((tier, list) => list->map((_, name) => GetComponent(name, side .. tier)))
-  #   ->flatten()
-  #   ->filter((_, val) => !!val)
+  return Get(side, mode)
+    ->deepcopy()
+    ->map((tier, list) => list->map((_, name) => GetComponent(name, side .. tier)))
+    ->flatten()
+    ->filter((_, val) => !!val)
 enddef
 
 

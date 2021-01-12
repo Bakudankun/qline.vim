@@ -129,12 +129,12 @@ def ConvertAirlinePalette(name: string): dict<dict<list<string>>>
       right1: palette[category]->get('airline_y', palette.normal.airline_x)->copy(),
       right2: palette[category]->get('airline_x', palette.normal.airline_y)->copy(),
     }
-    (ret[category])->extend({middle: [
+    ret[category].middle = [
       ret[category].left2[1],
       ret[category].left2[1],
       ret[category].left2[3],
       ret[category].left2[3],
-    ]})
+    ]
     if category !=# 'inactive' && !ret[category].left0->get(4)
       (ret[category].left0)->insert('bold', 4)
     endif
@@ -177,13 +177,13 @@ def ConvertLightlinePalette(name: string): dict<dict<list<string>>>
     for sidename in mode->keys()
       const side = mode[sidename]
       if sidename !=# 'left' && sidename !=# 'right'
-        (ret[modename])->extend({[sidename]: side[0]})
+        ret[modename][sidename] = side[0]
         continue
       endif
 
       for idx in range(3)
         if idx < len(side)
-          (ret[modename])->extend({[sidename .. idx]: side[idx]})
+          ret[modename][sidename .. idx] = side[idx]
           continue
         endif
       endfor
@@ -229,11 +229,13 @@ def DefineHighlight(mode: string,
         return
       endif
 
-      (palette.normal)->extend({[color]: ConvertHighlight(color)})
+      palette.normal[color] = ConvertHighlight(color)
     endif
 
     for category in palette->keys()
-      palette[category]->extend({[color]: palette.normal[color]}, 'keep')
+      if !palette[category]->has_key(color)
+        palette[category][color] = palette.normal[color]
+      endif
     endfor
   endfor
 
