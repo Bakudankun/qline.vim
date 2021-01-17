@@ -69,7 +69,7 @@ enddef
 def GetHighlightName(mode: string,
                      tier: string,
                      nexttier: string = ''): string
-  final dirs: list<any> = [mode, tier]
+  final dirs: list<string> = [mode, tier]
   if !!nexttier
     dirs->add(nexttier)
   endif
@@ -80,25 +80,17 @@ enddef
 
 def LoadPalette(name: string)
   var palette: dict<dict<list<string>>> = {}
-  try
-    if name->stridx('lightline:') == 0
-      palette = ConvertLightlinePalette(name[10 : ])
-    elseif name->stridx('airline:') == 0
-      palette = ConvertAirlinePalette(name[8 : ])
-    elseif name ==# 'default'
-      palette = GetOriginalPalette(name)
-    endif
-  catch
-    # TODO: try-catch does not work for now.
-  endtry
+  if name->stridx('lightline:') == 0
+    palette = ConvertLightlinePalette(name[10 : ])
+  elseif name->stridx('airline:') == 0
+    palette = ConvertAirlinePalette(name[8 : ])
+  elseif name ==# 'default'
+    palette = GetOriginalPalette(name)
+  endif
   if !palette
-    echoerr 'qline.vim: ERROR: colorscheme' name 'not found.'
     return
   endif
-  # cannot do:
-  # palettes[name] = palette
-  # bug of Vim?
-  palettes->extend({[name]: palette})
+  palettes[name] = palette
 enddef
 
 
