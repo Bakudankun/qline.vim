@@ -108,27 +108,32 @@ def ConvertAirlinePalette(name: string): dict<dict<list<string>>>
     return ret
   endif
 
-  for category in ['normal', 'inactive', 'replace', 'commandline', 'visual', 'terminal', 'insert']
-    if !palette->has_key(category)
-      ret[category] = ret.normal
+  for modename in ['normal', 'insert', 'visual', 'replace', 'terminal', 'commandline', 'inactive']
+    ret[modename] = {}
+    ret[modename] = ret.normal->deepcopy()
+
+    if !palette->has_key(modename)
       continue
     endif
-    ret[category] = {
-      left0:  palette[category]->get('airline_a', palette.normal.airline_a)->copy(),
-      left1:  palette[category]->get('airline_b', palette.normal.airline_b)->copy(),
-      left2:  palette[category]->get('airline_c', palette.normal.airline_c)->copy(),
-      right0: palette[category]->get('airline_z', palette.normal.airline_z)->copy(),
-      right1: palette[category]->get('airline_y', palette.normal.airline_x)->copy(),
-      right2: palette[category]->get('airline_x', palette.normal.airline_y)->copy(),
-    }
-    ret[category].middle = [
-      ret[category].left2[1],
-      ret[category].left2[1],
-      ret[category].left2[3],
-      ret[category].left2[3],
+
+    const mode = palette[modename]
+
+    ret[modename]->extend({
+        left0:  mode->get('airline_a'),
+        left1:  mode->get('airline_b'),
+        left2:  mode->get('airline_c'),
+        right0: mode->get('airline_z'),
+        right1: mode->get('airline_y'),
+        right2: mode->get('airline_x'),
+      }->deepcopy()->filter((_, v) => v))
+    ret[modename].middle = [
+      ret[modename].left2[1],
+      ret[modename].left2[1],
+      ret[modename].left2[3],
+      ret[modename].left2[3],
     ]
-    if category !=# 'inactive' && !ret[category].left0->get(4)
-      (ret[category].left0)->insert('bold', 4)
+    if modename !=# 'inactive' && !ret[modename].left0->get(4)
+      ret[modename].left0->insert('bold', 4)
     endif
   endfor
   return ret
@@ -148,34 +153,31 @@ enddef
 
 def ConvertLightlinePalette(name: string): dict<dict<list<string>>>
   final ret: dict<dict<list<string>>> = {}
-  const palette: dict<dict<list<list<string>>>> = GetLightlinePalette(name)
+  const palette = GetLightlinePalette(name)
   if !palette
     return ret
   endif
+
   for modename in ['normal', 'insert', 'visual', 'replace', 'terminal', 'commandline', 'inactive']
     ret[modename] = {}
-    const fallback: dict<list<string>> = modename ==# 'terminal'
-                                       ? ret.insert : ret.normal
+    ret[modename] = (modename ==# 'terminal' ? ret.insert : ret.normal)->deepcopy()
 
     if !palette->has_key(modename)
-      ret[modename] = fallback
       continue
     endif
-
-    ret[modename] = fallback->copy()
 
     const mode = palette[modename]
 
     for sidename in mode->keys()
       const side = mode[sidename]
       if sidename !=# 'left' && sidename !=# 'right'
-        ret[modename][sidename] = side[0]
+        ret[modename][sidename] = side[0]->copy()
         continue
       endif
 
       for idx in range(3)
         if idx < len(side)
-          ret[modename][sidename .. idx] = side[idx]
+          ret[modename][sidename .. idx] = side[idx]->copy()
           continue
         endif
       endfor
