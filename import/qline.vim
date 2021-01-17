@@ -69,8 +69,9 @@ export def Statusline(): string
       endif
     endif
 
+    var sidestr = '' # string for statusline on this side
     for index in range(len(components))
-      statusline[side] = statusline[side] .. components[index].content
+      sidestr ..= components[index].content
 
       if index >= len(components) - 1
         break
@@ -85,37 +86,39 @@ export def Statusline(): string
                          : GetHighlight(mode, next_hl, current_hl)) .. separator .. GetHighlight(mode, next_hl)
         if side ==# left
           if margin ==# 'INSIDE' || margin ==# 'RIGHT'
-            statusline[side] = statusline[side] .. highlighted_separator .. ' '
+            sidestr ..= highlighted_separator .. ' '
           elseif margin ==# 'OUTSIDE' || margin ==# 'LEFT'
-            statusline[side] = statusline[side] .. ' ' .. highlighted_separator
+            sidestr ..= ' ' .. highlighted_separator
           else
-            statusline[side] = statusline[side] .. margin .. highlighted_separator .. margin
+            sidestr ..= margin .. highlighted_separator .. margin
           endif
         else
           if margin ==# 'OUTSIDE' || margin ==# 'RIGHT'
-            statusline[side] = statusline[side] .. highlighted_separator .. ' '
+            sidestr ..= highlighted_separator .. ' '
           elseif margin ==# 'INSIDE' || margin ==# 'LEFT'
-            statusline[side] = statusline[side] .. ' ' .. highlighted_separator
+            sidestr ..= ' ' .. highlighted_separator
           else
-            statusline[side] = statusline[side] .. margin .. highlighted_separator .. margin
+            sidestr ..= margin .. highlighted_separator .. margin
           endif
         endif
       else
-        statusline[side] = statusline[side] .. subseparator
+        sidestr ..= subseparator
       endif
     endfor
 
     const globmargin: string = margin =~# '\v^(INSIDE|OUTSIDE|LEFT|RIGHT)$' ? ' ' : margin
-    statusline[side] = GetHighlight(mode, components[0].highlight) .. globmargin ..
-                       statusline[side] .. globmargin
+    sidestr = GetHighlight(mode, components[0].highlight) .. globmargin ..
+                       sidestr .. globmargin
 
     if !!separator && components->len() > 0
       if side ==# left
-        statusline[side] = statusline[side] .. GetHighlight(mode, components[-1].highlight, 'middle') .. separator
+        sidestr = sidestr .. GetHighlight(mode, components[-1].highlight, 'middle') .. separator
       else
-        statusline[side] = GetHighlight(mode, components[0].highlight, 'middle') .. separator .. statusline[side]
+        sidestr = GetHighlight(mode, components[0].highlight, 'middle') .. separator .. sidestr
       endif
     endif
+
+    statusline[side] = sidestr
   endfor
 
   return statusline.left .. GetHighlight(mode, 'middle') .. '%=' .. statusline.right
