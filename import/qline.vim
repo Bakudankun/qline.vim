@@ -127,8 +127,7 @@ enddef
 
 def GetComponents(mode: string, side: string): list<dict<any>>
   return Get(side, mode)
-    ->deepcopy()
-    ->map((tier, list) => list->map((_, name) => GetComponent(name, side .. tier)))
+    ->mapnew((tier, list) => list->mapnew((_, name) => GetComponent(name, side .. tier)))
     ->flatten()
     ->filter((_, val) => !!val)
 enddef
