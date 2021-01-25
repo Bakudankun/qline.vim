@@ -5,19 +5,19 @@ var initialized: bool = false
 
 # Extend dictionaries recursively.
 def Extend(base: dict<any>, merge: dict<any>, mode: string = 'force')
-  for key in keys(merge)
+  for [key, val] in items(merge)
     if !base->has_key(key)
-      base[key] = merge[key]->deepcopy()
+      base[key] = val->deepcopy()
       continue
     endif
 
-    if type(base[key]) == v:t_dict && type(merge[key]) == v:t_dict
-      base[key]->Extend(merge[key], mode)
+    if type(base[key]) == v:t_dict && type(val) == v:t_dict
+      base[key]->Extend(val, mode)
       continue
     endif
 
     if mode ==# 'force'
-      base[key] = merge[key]->deepcopy()
+      base[key] = val->deepcopy()
     endif
   endfor
 enddef

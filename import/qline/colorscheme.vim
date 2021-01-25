@@ -166,10 +166,7 @@ def ConvertLightlinePalette(name: string): dict<dict<list<string>>>
       continue
     endif
 
-    const mode = palette[modename]
-
-    for sidename in mode->keys()
-      const side = mode[sidename]
+    for [sidename, side] in palette[modename]->items()
       if sidename !=# 'left' && sidename !=# 'right'
         ret[modename][sidename] = side[0]->copy()
         continue
@@ -209,26 +206,26 @@ def DefineHighlight(mode: string,
 
   const mode_palette = palette->get(mode, palette.normal)
 
-  for color in [tier, nexttier]->filter((_, val) => !!val)
-    if mode_palette->has_key(color)
+  for tiername in [tier, nexttier]->filter((_, val) => !!val)
+    if mode_palette->has_key(tiername)
       continue
     endif
 
-    if color =~# '^\(left\|right\)\d$'
+    if tiername =~# '^\(left\|right\)\d$'
       continue
     endif
 
-    if !palette.normal->has_key(color)
-      if !hlexists(color)
+    if !palette.normal->has_key(tiername)
+      if !hlexists(tiername)
         return
       endif
 
-      palette.normal[color] = ConvertHighlight(color)
+      palette.normal[tiername] = ConvertHighlight(tiername)
     endif
 
-    for category in palette->keys()
-      if !palette[category]->has_key(color)
-        palette[category][color] = palette.normal[color]
+    for color in palette->values()
+      if !color->has_key(tiername)
+        color[tiername] = palette.normal[tiername]
       endif
     endfor
   endfor
