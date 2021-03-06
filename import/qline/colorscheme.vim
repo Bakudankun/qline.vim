@@ -143,7 +143,7 @@ enddef
 def GetAirlinePalette(name: string): dict<dict<list<string>>>
   try
     return eval('g:airline#themes#' .. name .. '#palette')->deepcopy()
-      ->map((_, category) => category->map((_, section) => section->map((_, val) => '' .. val)))
+      ->map((_0, category) => category->map((_1, section) => section->map((_2, val) => '' .. val)))
   catch
     throw 'qline.vim: ERROR: Airline palette "' .. name .. '" not found.'
   endtry
@@ -187,7 +187,7 @@ enddef
 def GetLightlinePalette(name: string): dict<dict<list<list<string>>>>
   try
     return eval('g:lightline#colorscheme#' .. name .. '#palette')->deepcopy()
-      ->map((_, mode) => mode->map((_, side) => side->map((_, tier) => tier->map((_, val) => '' .. val))))
+      ->map((_0, mode) => mode->map((_1, side) => side->map((_2, tier) => tier->map((_3, val) => '' .. val))))
   catch
     throw 'qline.vim: ERROR: Lightline palette "' .. name .. '" not found.'
   endtry
