@@ -211,14 +211,14 @@ export def GetComponentContent(name: string): string
 enddef
 
 
-var win_call_ret: any = 0
+var win_call_ret: any
 var WinCallFunc: func
 def WinCall(winid: number, Func: func): any
   if winid == g:actual_curwin
     return Func()
   endif
   WinCallFunc = Func
-  win_execute(winid, 's:win_call_ret = s:WinCallFunc()')
+  win_execute(winid, 'win_call_ret = WinCallFunc()')
   return win_call_ret
 enddef
 
