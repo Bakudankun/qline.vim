@@ -34,41 +34,39 @@ example configuration which is part of mine is in the following spoiler.
 " Define highlight for Git-related components.
 highlight Git guibg=#F34F29 guifg=#FFFFFF ctermbg=202 ctermfg=231
 
-" Define a :def function to use Vim9 syntax and compiled lambdas in a legacy
-" Vim script.
-def s:qline_config()
-  g:qline_config = {
+" Use :vim9cmd to use Vim9 syntax and compiled lambdas in a legacy Vim script.
+vim9cmd g:qline_config = {
 # Use the powerline glyphs for separators.
-    separator:    {left: "\ue0b0", right: "\ue0b2", margin: ' '},
-    subseparator: {left: "\ue0b1", right: "\ue0b3", margin: ' '},
+  separator:    {left: "\ue0b0", right: "\ue0b2", margin: ' '},
+  subseparator: {left: "\ue0b1", right: "\ue0b3", margin: ' '},
 # Specify components in the each sides for active/inactive windows.
 # Each modes can also have specific settings.
-    active: {
-      left: [
-        ['mode', 'paste'],
-        ['gina_branch', 'gina_traffic', 'gina_status', 'filename', 'gitgutter'],
-        ['bufstate']
-      ],
-      right: [
-        ['filetype'],
-        ['fileinfo'],
-        ['%c%-1V', 'searchcount']
-      ]
-    },
-    inactive: {
-      left: [['filename', 'gitgutter'], ['bufstate']],
-      right: [['filetype'], ['fileinfo']],
-      separator: {left: '', right: '', margin: ' '},
-      subseparator: {left: '|', right: '|', margin: ' '},
-    },
-    insert: {
-      separator:    {left: "\ue0c0", right: "\ue0c2", margin: ' '},
-      subseparator: {left: "\ue0c1", right: "\ue0c3", margin: ' '},
-    },
-    replace: {
-      separator:    {left: "\ue0c0", right: "\ue0c2", margin: ' '},
-      subseparator: {left: "\ue0c1", right: "\ue0c3", margin: ' '},
-    },
+  active: {
+    left: [
+      ['mode', 'paste'],
+      ['gina_branch', 'gina_traffic', 'gina_status', 'filename', 'gitgutter'],
+      ['bufstate']
+    ],
+    right: [
+      ['filetype'],
+      ['fileinfo'],
+      ['%c%-1V', 'searchcount']
+    ]
+  },
+  inactive: {
+    left: [['filename', 'gitgutter'], ['bufstate']],
+    right: [['filetype'], ['fileinfo']],
+    separator: {left: '', right: '', margin: ' '},
+    subseparator: {left: '|', right: '|', margin: ' '},
+  },
+  insert: {
+    separator:    {left: "\ue0c0", right: "\ue0c2", margin: ' '},
+    subseparator: {left: "\ue0c1", right: "\ue0c3", margin: ' '},
+  },
+  replace: {
+    separator:    {left: "\ue0c0", right: "\ue0c2", margin: ' '},
+    subseparator: {left: "\ue0c1", right: "\ue0c3", margin: ' '},
+  },
 # Define components. You can overwrite or append to the default definitions.
 # If its content is a Funcref, it is evaluated before parsing the statusline.
 # If visible_condition results in Falsy, or the content results in empty string,
@@ -76,52 +74,46 @@ def s:qline_config()
 # Funcrefs are evaluated in the context of the window of the drawing status line.
 # Note that in Vim9, functions cannot use non-autoload functions that are later
 # defined. Use `eval()` to work around.
-    component: {
-      fileinfo: {
-        content: () =>
-          (&fenc ?? &enc) .. ' ' ..
-          nerdfont#fileformat#find() ..
-          (&bomb ? "\U1f4a3" : ''),
-        visible_condition: () => !&buftype,
-      },
-      bufstate: {
-        content: () =>
-          (&readonly ? "\uf023" : '') ..
-          (&modifiable ? '' : "\uf05e") ..
-          (&modified ? "\uf040" : ''),
-      },
-      filetype: {
-        content: () => nerdfont#find(),
-      },
-      gina_branch: {
-        content: () => "\ue0a0" .. gina#component#repo#branch(),
-        visible_condition: function('gina#component#repo#branch'),
-        highlight: 'Git',
-      },
-      gina_traffic: {
-        content: function('gina#component#traffic#preset', ['fancy']),
-        highlight: 'Git',
-      },
-      gina_status: {
-        content: function('gina#component#status#preset', ['fancy']),
-        highlight: 'Git',
-      },
-      gitgutter: {
-        content: () =>
-          eval('GitGutterGetHunkSummary()')->copy()
-            ->map((idx, val) => !val ? '' : ['+', '~', '-'][idx] .. val)
-            ->filter((_, val) => !!val)
-            ->join(),
-        visible_condition: () => eval('GitGutterGetHunks()'),
-      },
+  component: {
+    fileinfo: {
+      content: () =>
+        (&fenc ?? &enc) .. ' ' ..
+        nerdfont#fileformat#find() ..
+        (&bomb ? "\U1f4a3" : ''),
+      visible_condition: () => !&buftype,
     },
-  }
-enddef
-
-
-
-" Ah, don't forget to call the function.
-call s:qline_config()
+    bufstate: {
+      content: () =>
+        (&readonly ? "\uf023" : '') ..
+        (&modifiable ? '' : "\uf05e") ..
+        (&modified ? "\uf040" : ''),
+    },
+    filetype: {
+      content: () => nerdfont#find(),
+    },
+    gina_branch: {
+      content: () => "\ue0a0" .. gina#component#repo#branch(),
+      visible_condition: function('gina#component#repo#branch'),
+      highlight: 'Git',
+    },
+    gina_traffic: {
+      content: function('gina#component#traffic#preset', ['fancy']),
+      highlight: 'Git',
+    },
+    gina_status: {
+      content: function('gina#component#status#preset', ['fancy']),
+      highlight: 'Git',
+    },
+    gitgutter: {
+      content: () =>
+        eval('GitGutterGetHunkSummary()')->copy()
+          ->map((idx, val) => !val ? '' : ['+', '~', '-'][idx] .. val)
+          ->filter((_, val) => !!val)
+          ->join(),
+      visible_condition: () => eval('GitGutterGetHunks()'),
+    },
+  },
+}
 ```
 
 </details>

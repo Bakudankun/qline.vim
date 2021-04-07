@@ -13,7 +13,6 @@ def qline#define_autocmd()
   augroup qline
     autocmd!
     autocmd ColorScheme * qline#colorscheme#reset()
-    autocmd SafeState * OnSafeState()
   augroup END
 enddef
 
@@ -28,19 +27,6 @@ enddef
 def qline#statusline(): string
   import Statusline from '../import/qline.vim'
   return Statusline()
-enddef
-
-
-var wascmdline: bool = false
-export def OnSafeState()
-  # Redraw statusline on entering commandline.
-  # Using CmdlineEnter has side effect that clears command output when
-  # entering command line mode in succession.
-  const iscmdline: bool = mode() ==# 'c'
-  if iscmdline && !wascmdline
-    redrawstatus
-  endif
-  wascmdline = iscmdline
 enddef
 
 

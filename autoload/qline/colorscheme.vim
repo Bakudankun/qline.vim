@@ -1,8 +1,9 @@
 vim9script
 
+import {Set as SetColorscheme, ResetHighlight} from '../../import/qline/colorscheme.vim'
+
 
 def qline#colorscheme#set(name: string)
-  import SetColorscheme from '../../import/qline/colorscheme.vim'
   SetColorscheme(name)
 enddef
 
@@ -21,7 +22,6 @@ enddef
 
 
 def qline#colorscheme#reset()
-  import ResetHighlight from '../../import/qline/colorscheme.vim'
   ResetHighlight()
 enddef
 

@@ -1,5 +1,6 @@
 vim9script
 
+import * as Config from './config.vim'
 
 final palettes: dict<dict<dict<list<string>>>> = {}
 var current_colorscheme: string = ''
@@ -19,11 +20,9 @@ export def GetHighlight(mode: string,
 enddef
 
 
-export def SetColorscheme(name: string)
-  import Set from './config.vim'
-
+export def Set(name: string)
   if name ==# current_colorscheme
-    Set({colorscheme: name})
+    Config.Set({colorscheme: name})
     return
   endif
 
@@ -37,7 +36,7 @@ export def SetColorscheme(name: string)
 
   current_colorscheme = name
   ResetHighlight()
-  Set({colorscheme: name})
+  Config.Set({colorscheme: name})
 enddef
 
 
@@ -53,13 +52,12 @@ enddef
 
 
 def GetPalette(): dict<dict<list<string>>>
-  import Get from '../qline/config.vim'
   if palettes->has_key(current_colorscheme)
     return palettes[current_colorscheme]
   endif
 
   if !current_colorscheme
-    SetColorscheme(Get('colorscheme'))
+    Set(Config.Get('colorscheme'))
   endif
 
   return palettes->get(current_colorscheme, {})

@@ -1,6 +1,6 @@
 vim9script
 
-import Get from './qline/config.vim'
+import Get as GetConfig from './qline/config.vim'
 
 const left = 'left'
 const right = 'right'
@@ -34,7 +34,7 @@ export def Statusline(): string
     : mode_strings->get(mode(), 'normal')
 
   final statusline: dict<string> = {left: '', right: ''}
-  const margin: string = Get('separator.margin', mode)
+  const margin: string = GetConfig('separator.margin', mode)
 
   for side in [left, right]
     final components: list<dict<any>> = WinCall(winid, function(GetComponents, [mode, side]))
@@ -47,10 +47,10 @@ export def Statusline(): string
       components->reverse()
     endif
 
-    const separator: string = Get('separator.' .. side, mode)
-    var subseparator: string = side ==# left ? Get('subseparator.' .. side, mode)
-                                             : Get('subseparator.' .. side, mode)
-    const submargin: string = Get('subseparator.margin', mode)
+    const separator: string = GetConfig('separator.' .. side, mode)
+    var subseparator: string = side ==# left ? GetConfig('subseparator.' .. side, mode)
+                                             : GetConfig('subseparator.' .. side, mode)
+    const submargin: string = GetConfig('subseparator.margin', mode)
     if side ==# left
       if submargin ==# 'INSIDE' || submargin ==# 'RIGHT'
         subseparator = subseparator .. ' '
@@ -126,7 +126,7 @@ enddef
 
 
 def GetComponents(mode: string, side: string): list<dict<any>>
-  return Get(side, mode)
+  return GetConfig(side, mode)
     ->mapnew((tier, list) => list->mapnew((_, name) => GetComponent(name, side .. tier)))
     ->flattennew()
     ->filter((_, val) => !!val)
@@ -141,7 +141,7 @@ def GetComponent(name: string, highlight: string): dict<any>
     return {}
   endif
 
-  const component = Get('component.' .. name)
+  const component = GetConfig('component.' .. name)
   if component->type() != v:t_dict
     return {content: content, highlight: highlight}
   endif
@@ -157,7 +157,7 @@ enddef
 
 
 export def GetComponentContent(name: string): string
-  const components: dict<any> = Get('component')
+  const components: dict<any> = GetConfig('component')
 
   if !components->has_key(name)
     return name =~# '^\s*%' ? name : ''
