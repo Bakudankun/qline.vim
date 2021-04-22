@@ -72,8 +72,6 @@ vim9cmd g:qline_config = {
 # If visible_condition results in Falsy, or the content results in empty string,
 # the component is collapsed.
 # Funcrefs are evaluated in the context of the window of the drawing status line.
-# Note that in Vim9, functions cannot use non-autoload functions that are later
-# defined. Use `eval()` to work around.
   component: {
     fileinfo: {
       content: () =>
@@ -106,11 +104,11 @@ vim9cmd g:qline_config = {
     },
     gitgutter: {
       content: () =>
-        eval('GitGutterGetHunkSummary()')->copy()
-          ->map((idx, val) => !val ? '' : ['+', '~', '-'][idx] .. val)
+        g:GitGutterGetHunkSummary()
+          ->mapnew((idx, val) => !val ? '' : ['+', '~', '-'][idx] .. val)
           ->filter((_, val) => !!val)
           ->join(),
-      visible_condition: () => eval('GitGutterGetHunks()'),
+      visible_condition: () => g:GitGutterGetHunks(),
     },
   },
 }
