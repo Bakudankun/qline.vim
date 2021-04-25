@@ -24,7 +24,7 @@ enddef
 
 
 def Init()
-  import default_config from './config/default.vim'
+  import default_config from 'qline/config/default.vim'
 
   if !exists('g:qline_config')
     g:qline_config = {}

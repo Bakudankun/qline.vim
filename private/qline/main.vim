@@ -1,6 +1,6 @@
 vim9script
 
-import Get as GetConfig from './qline/config.vim'
+import Get as GetConfig from 'qline/config.vim'
 
 const left = 'left'
 const right = 'right'
@@ -23,7 +23,8 @@ const mode_strings: dict<string> = {
 export def Statusline(): string
   :doautocmd <nomodeline> User QlineUpdate
 
-  import GetHighlight from './qline/colorscheme.vim'
+  import GetHighlight from './colorscheme.vim'
+  import WinCall from './util.vim'
 
   g:actual_curbuf = bufnr()
   g:actual_curwin = win_getid()
@@ -134,7 +135,7 @@ enddef
 
 
 def GetComponent(name: string, highlight: string): dict<any>
-  import ColorExists from './qline/colorscheme.vim'
+  import ColorExists from './colorscheme.vim'
 
   const content: string = name->GetComponentContent()
   if !content
@@ -208,18 +209,6 @@ export def GetComponentContent(name: string): string
   endif
 
   return ''
-enddef
-
-
-var win_call_ret: any
-var WinCallFunc: func
-def WinCall(winid: number, Func: func): any
-  if winid == g:actual_curwin
-    return Func()
-  endif
-  WinCallFunc = Func
-  win_execute(winid, 'win_call_ret = WinCallFunc()')
-  return win_call_ret
 enddef
 
 

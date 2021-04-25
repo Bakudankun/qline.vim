@@ -1,6 +1,6 @@
 vim9script
 
-import * as Config from './config.vim'
+import * as Config from 'qline/config.vim'
 
 final palettes: dict<dict<dict<list<string>>>> = {}
 var current_colorscheme: string = ''

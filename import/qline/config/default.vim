@@ -2,7 +2,7 @@ vim9script
 
 
 def Mode_Content(): string
-  import Get from '../config.vim'
+  import Get from 'qline/config.vim'
   const mode_map: dict<string> = Get('mode_map')
   var mode_char: string = mode(1)
   if mode_map->has_key(mode_char)

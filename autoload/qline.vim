@@ -25,7 +25,7 @@ enddef
 
 
 def qline#statusline(): string
-  import Statusline from '../import/qline.vim'
+  import Statusline from '../private/qline/main.vim'
   return Statusline()
 enddef
 
