@@ -23,17 +23,18 @@ export def Get(query: string, mode: string = ''): any
     Init()
   endif
 
+  const dict: string = 'g:qline_config.'
   var varname: string
 
   if !!mode
-    varname = 'g:qline_config.' .. mode .. '.' .. query
+    varname = dict .. mode .. '.' .. query
 
     if exists(varname)
       return eval(varname)->deepcopy()
     endif
 
     if mode !=# 'inactive'
-      varname = 'g:qline_config.active.' .. query
+      varname = dict .. 'active.' .. query
 
       if exists(varname)
         return eval(varname)->deepcopy()
@@ -41,7 +42,7 @@ export def Get(query: string, mode: string = ''): any
     endif
   endif
 
-  varname = 'g:qline_config.' .. query
+  varname = dict .. query
 
   if exists(varname)
     return eval(varname)->deepcopy()
