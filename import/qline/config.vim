@@ -29,14 +29,14 @@ export def Get(query: string, mode: string = ''): any
     varname = 'g:qline_config.' .. mode .. '.' .. query
 
     if exists(varname)
-      return eval(varname)
+      return eval(varname)->deepcopy()
     endif
 
     if mode !=# 'inactive'
       varname = 'g:qline_config.active.' .. query
 
       if exists(varname)
-        return eval(varname)
+        return eval(varname)->deepcopy()
       endif
     endif
   endif
@@ -44,7 +44,7 @@ export def Get(query: string, mode: string = ''): any
   varname = 'g:qline_config.' .. query
 
   if exists(varname)
-    return eval(varname)
+    return eval(varname)->deepcopy()
   endif
 
   return v:null

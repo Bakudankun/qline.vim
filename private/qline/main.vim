@@ -142,18 +142,17 @@ def GetComponent(name: string, highlight: string): dict<any>
     return {}
   endif
 
-  const component = GetConfig('component.' .. name)
+  final component = GetConfig('component.' .. name)
   if component->type() != v:t_dict
     return {content: content, highlight: highlight}
   endif
 
-  final ret = component->deepcopy()
-  ret.content = content
-  if !ret->has_key('highlight') || !ColorExists(ret.highlight)
-    ret.highlight = highlight
+  component.content = content
+  if !component->has_key('highlight') || !ColorExists(component.highlight)
+    component.highlight = highlight
   endif
 
-  return ret
+  return component
 enddef
 
 
