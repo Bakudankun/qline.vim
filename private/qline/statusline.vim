@@ -156,7 +156,7 @@ def GetComponent(name: string, highlight: string): dict<any>
 enddef
 
 
-export def GetComponentContent(name: string): string
+def GetComponentContent(name: string): string
   const components: dict<any> = GetConfig('component')
 
   if !components->has_key(name)
