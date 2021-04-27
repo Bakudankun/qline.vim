@@ -41,7 +41,7 @@ enddef
 
 
 export def ResetHighlight()
-  defined_highlights->filter(() => false)
+  defined_highlights->filter((_, _) => false)
 enddef
 
 
@@ -140,8 +140,10 @@ enddef
 
 def GetAirlinePalette(name: string): dict<dict<list<string>>>
   try
-    return eval('g:airline#themes#' .. name .. '#palette')->deepcopy()
-      ->map((_, category) => category->map((_, section) => section->map((_, val) => '' .. val)))
+    return eval('g:airline#themes#' .. name .. '#palette')
+      ->mapnew((_, category) => category
+        ->mapnew((_, section) => section
+          ->mapnew((_, val) => '' .. val)))
   catch
     throw 'qline.vim: ERROR: Airline palette "' .. name .. '" not found.'
   endtry
@@ -184,8 +186,11 @@ enddef
 
 def GetLightlinePalette(name: string): dict<dict<list<list<string>>>>
   try
-    return eval('g:lightline#colorscheme#' .. name .. '#palette')->deepcopy()
-      ->map((_, mode) => mode->map((_, side) => side->map((_, tier) => tier->map((_, val) => '' .. val))))
+    return eval('g:lightline#colorscheme#' .. name .. '#palette')
+      ->mapnew((_, mode) => mode
+        ->mapnew((_, side) => side
+          ->mapnew((_, tier) => tier
+            ->mapnew((_, val) => '' .. val))))
   catch
     throw 'qline.vim: ERROR: Lightline palette "' .. name .. '" not found.'
   endtry
