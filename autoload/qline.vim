@@ -3,7 +3,7 @@ vim9script
 
 def qline#enable()
   set laststatus=2
-  set statusline=%!qline#statusline()
+  set statusline=%{%qline#statusline()%}
 
   qline#define_autocmd()
 enddef

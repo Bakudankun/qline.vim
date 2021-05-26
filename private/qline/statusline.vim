@@ -24,21 +24,20 @@ export def Statusline(): string
   :doautocmd <nomodeline> User QlineUpdate
 
   import GetHighlight from './colorscheme.vim'
-  import WinCall from './util.vim'
 
-  g:actual_curbuf = bufnr()
-  g:actual_curwin = win_getid()
-
-  const winid: number = g:->get('statusline_winid', g:actual_curwin)
-  const type: string = winid == g:actual_curwin ? 'active' : 'inactive'
-  const mode: string = type ==# 'inactive' ? 'inactive'
-    : mode_strings->get(mode(), 'normal')
+  const type: string = win_getid() == str2nr(g:actual_curwin) ?
+    'active' : 'inactive'
+  const mode: string = type ==# 'inactive' ?
+    'inactive' : mode_strings->get(mode(), 'normal')
 
   final statusline: dict<string> = {left: '', right: ''}
   const margin: string = GetConfig('separator.margin', mode)
 
   for side in [left, right]
-    final components: list<dict<any>> = WinCall(winid, function(GetComponents, [mode, side]))
+    final components: list<dict<any>> = GetConfig(side, mode)
+      ->mapnew((tier, list) => list->mapnew((_, name) => GetComponent(name, side .. tier)))
+      ->flattennew()
+      ->filter((_, val) => !!val)
 
     if !components
       continue
@@ -123,14 +122,6 @@ export def Statusline(): string
   endfor
 
   return statusline.left .. GetHighlight(mode, 'middle') .. '%=' .. statusline.right
-enddef
-
-
-def GetComponents(mode: string, side: string): list<dict<any>>
-  return GetConfig(side, mode)
-    ->mapnew((tier, list) => list->mapnew((_, name) => GetComponent(name, side .. tier)))
-    ->flattennew()
-    ->filter((_, val) => !!val)
 enddef
 
 
