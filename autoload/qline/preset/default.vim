@@ -1,9 +1,10 @@
 vim9script
 
+import Get as GetConfig from 'qline/config.vim'
+
 
 def Mode_Content(): string
-  import Get from 'qline/config.vim'
-  const mode_map: dict<string> = Get('mode_map')
+  const mode_map: dict<string> = GetConfig('mode_map')
   var mode_char: string = mode(1)
   if mode_map->has_key(mode_char)
     return mode_map[mode_char]
@@ -13,7 +14,7 @@ def Mode_Content(): string
   if mode_char ==# 'c'
     mode_char = getcmdtype()
   endif
-  return Get('mode_map')->get(mode_char, '')
+  return GetConfig('mode_map')->get(mode_char, '')
 enddef
 
 
@@ -37,7 +38,7 @@ def SearchCount_Content(): string
 enddef
 
 
-export const default_config = {
+const g:qline#preset#default#config: dict<any> = {
   manual: false,
   active: {
     left: [

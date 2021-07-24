@@ -1,6 +1,8 @@
 vim9script
 
 import Get as GetConfig from 'qline/config.vim'
+import {GetHighlight, ColorExists}  from './colorscheme.vim'
+
 
 const left = 'left'
 const right = 'right'
@@ -22,8 +24,6 @@ const mode_strings: dict<string> = {
 
 export def Statusline(): string
   :doautocmd <nomodeline> User QlineUpdate
-
-  import GetHighlight from './colorscheme.vim'
 
   const type: string = win_getid() == str2nr(g:actual_curwin) ?
     'active' : 'inactive'
@@ -126,8 +126,6 @@ enddef
 
 
 def GetComponent(name: string, highlight: string): dict<any>
-  import ColorExists from './colorscheme.vim'
-
   const content: string = name->GetComponentContent()
   if !content
     return {}

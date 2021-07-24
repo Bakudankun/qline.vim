@@ -7,13 +7,11 @@ var initialized: bool = false
 
 
 def Init()
-  import default_config from 'qline/config/default.vim'
-
   if !exists('g:qline_config')
     g:qline_config = {}
   endif
 
-  g:qline_config->Extend(default_config, 'keep')
+  g:qline_config->Extend(GetPreset('default'), 'keep')
   initialized = true
 enddef
 
@@ -58,6 +56,11 @@ export def Set(new_config: dict<any>)
   endif
 
   g:qline_config->Extend(new_config)
+enddef
+
+
+def GetPreset(name: string): dict<any>
+  return eval('g:qline#preset#' .. name .. '#config')
 enddef
 
 

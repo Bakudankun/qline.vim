@@ -1,7 +1,7 @@
 # qline.vim
 
-The quick, fully-customizable status line plugin written in cutting-edge Vim9
-script.
+The quick, easily-customizable status line plugin written in the cutting-edge
+Vim9 script.
 
 ![Demo](https://user-images.githubusercontent.com/4504807/96721994-db25e900-13e7-11eb-9628-0e774392227e.gif)
 
@@ -126,11 +126,8 @@ Note that some components use followings:
 
 ## Colorschemes?
 
-Currently the only default colorscheme is bundled, since Vim9 can't `:import`
-from dynamic paths at the moment.
-
-Instead, you can import colorschemes from
-[vim-airline](https://github.com/vim-airline/vim-airline)
+Currently the only default colorscheme is bundled. However, you can import
+colorschemes from [vim-airline](https://github.com/vim-airline/vim-airline)
 and [lightline.vim](https://github.com/itchyny/lightline.vim).
 To import, you need to install those plugins **and disable** them.
 

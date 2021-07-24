@@ -11,7 +11,7 @@ enddef
 def qline#colorscheme#get_list(argLead: string,
                                cmdLine: string,
                                cursorPos: number): string
-  return (globpath(&runtimepath, 'import/qline/colorscheme/*.vim', 1, 1)
+  return (globpath(&runtimepath, 'autoload/qline/colorscheme/*.vim', 1, 1)
       ->map((_, val) => val->fnamemodify(':t:r'))
     + globpath(&runtimepath, 'autoload/lightline/colorscheme/*.vim', 1, 1)
       ->map((_, val) => 'lightline:' .. val->fnamemodify(':t:r'))

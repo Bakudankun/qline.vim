@@ -1,5 +1,7 @@
 vim9script
 
+import Statusline from '../private/qline/statusline.vim'
+
 
 def qline#enable()
   set laststatus=2
@@ -25,7 +27,6 @@ enddef
 
 
 def qline#statusline(): string
-  import Statusline from '../private/qline/statusline.vim'
   return Statusline()
 enddef
 

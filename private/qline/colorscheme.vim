@@ -2,6 +2,7 @@ vim9script
 
 import * as Config from 'qline/config.vim'
 
+
 final palettes: dict<dict<dict<list<string>>>> = {}
 var current_colorscheme: string = ''
 final defined_highlights: list<string> = []
@@ -82,7 +83,7 @@ def LoadPalette(name: string)
     palette = ConvertLightlinePalette(name[10 : ])
   elseif name->stridx('airline:') == 0
     palette = ConvertAirlinePalette(name[8 : ])
-  elseif name ==# 'default'
+  else
     palette = GetOriginalPalette(name)
   endif
   if !palette
@@ -93,9 +94,12 @@ enddef
 
 
 def GetOriginalPalette(name: string): dict<dict<list<string>>>
-  import palette from 'qline/colorscheme/default.vim'
-  # TODO: importing from dynamic path is not implemented yet.
-  return palette->deepcopy()
+  try
+    return eval('g:qline#colorscheme#' .. name .. '#palette')->deepcopy()
+  catch
+    throw 'qline.vim: ERROR: Palette "' .. name .. '" not found.'
+  endtry
+  return {}
 enddef
 
 
