@@ -261,13 +261,15 @@ def DefineHighlight(mode: string,
 
   const name = GetHighlightName(mode, tier, nexttier)
 
-  :execute printf('highlight %s %s %s %s %s %s',
+  :execute printf('highlight %s guifg=%s guibg=%s ctermfg=%s ctermbg=%s gui=%s term=%s cterm=%s',
                   name,
-                  !guifg   ? '' : 'guifg=' .. guifg,
-                  !guibg   ? '' : 'guibg=' .. guibg,
-                  !ctermfg ? '' : 'ctermfg=' .. ctermfg,
-                  !ctermbg ? '' : 'ctermbg=' .. ctermbg,
-                  !attr    ? '' : 'gui=' .. attr .. ' term=' .. attr)
+                  guifg   ?? 'NONE',
+                  guibg   ?? 'NONE',
+                  ctermfg ?? 'NONE',
+                  ctermbg ?? 'NONE',
+                  attr    ?? 'NONE',
+                  attr    ?? 'NONE',
+                  attr    ?? 'NONE')
   defined_highlights->add(name)
 enddef
 
