@@ -1,6 +1,6 @@
 vim9script
 
-import Statusline from '../private/qline/statusline.vim'
+import '../private/qline/statusline.vim'
 
 
 def qline#enable()
@@ -27,7 +27,7 @@ enddef
 
 
 def qline#statusline(): string
-  return Statusline()
+  return statusline.Statusline()
 enddef
 
 

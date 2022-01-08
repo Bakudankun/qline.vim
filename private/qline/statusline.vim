@@ -1,7 +1,7 @@
 vim9script
 
-import Get as GetConfig from 'qline/config.vim'
-import {GetHighlight, ColorExists}  from './colorscheme.vim'
+import 'qline/config.vim'
+import './colorscheme.vim'
 
 
 const left = 'left'
@@ -23,6 +23,7 @@ const mode_strings: dict<string> = {
 
 
 export def Statusline(): string
+  const GetHighlight = colorscheme.GetHighlight
   :doautocmd <nomodeline> User QlineUpdate
 
   const type: string = win_getid() == str2nr(g:actual_curwin) ?
@@ -31,10 +32,10 @@ export def Statusline(): string
     'inactive' : mode_strings->get(mode(), 'normal')
 
   final statusline: dict<string> = {left: '', right: ''}
-  const margin: string = GetConfig('separator.margin', mode)
+  const margin: string = config.Get('separator.margin', mode)
 
   for side in [left, right]
-    final components: list<dict<any>> = GetConfig(side, mode)
+    final components: list<dict<any>> = config.Get(side, mode)
       ->mapnew((tier, list) => list->mapnew((_, name) => GetComponent(name, side .. tier)))
       ->flattennew()
       ->filter((_, val) => !!val)
@@ -47,10 +48,10 @@ export def Statusline(): string
       components->reverse()
     endif
 
-    const separator: string = GetConfig('separator.' .. side, mode)
-    var subseparator: string = side ==# left ? GetConfig('subseparator.' .. side, mode)
-                                             : GetConfig('subseparator.' .. side, mode)
-    const submargin: string = GetConfig('subseparator.margin', mode)
+    const separator: string = config.Get('separator.' .. side, mode)
+    var subseparator: string = side ==# left ? config.Get('subseparator.' .. side, mode)
+                                             : config.Get('subseparator.' .. side, mode)
+    const submargin: string = config.Get('subseparator.margin', mode)
     if side ==# left
       if submargin ==# 'INSIDE' || submargin ==# 'RIGHT'
         subseparator = subseparator .. ' '
@@ -131,13 +132,13 @@ def GetComponent(name: string, highlight: string): dict<any>
     return {}
   endif
 
-  final component = GetConfig('component.' .. name)
+  final component = config.Get('component.' .. name)
   if component->type() != v:t_dict
     return {content: content, highlight: highlight}
   endif
 
   component.content = content
-  if !component->has_key('highlight') || !ColorExists(component.highlight)
+  if !component->has_key('highlight') || !colorscheme.ColorExists(component.highlight)
     component.highlight = highlight
   endif
 
@@ -146,7 +147,7 @@ enddef
 
 
 def GetComponentContent(name: string): string
-  const components: dict<any> = GetConfig('component')
+  const components: dict<any> = config.Get('component')
 
   if !components->has_key(name)
     return name =~# '^\s*%' ? name : ''

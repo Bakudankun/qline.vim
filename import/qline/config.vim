@@ -1,6 +1,6 @@
 vim9script
 
-import Extend from '../../private/qline/util.vim'
+import '../../private/qline/util.vim'
 
 
 var initialized: bool = false
@@ -11,7 +11,7 @@ def Init()
     g:qline_config = {}
   endif
 
-  g:qline_config->Extend(GetPreset('default'), 'keep')
+  util.Extend(g:qline_config, GetPreset('default'), 'keep')
   initialized = true
 enddef
 
@@ -55,7 +55,7 @@ export def Set(new_config: dict<any>)
     g:qline_config = {}
   endif
 
-  g:qline_config->Extend(new_config)
+  util.Extend(g:qline_config, new_config)
 enddef
 
 

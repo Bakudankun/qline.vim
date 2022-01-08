@@ -1,10 +1,10 @@
 vim9script
 
-import Get as GetConfig from 'qline/config.vim'
+import 'qline/config.vim'
 
 
 def Mode_Content(): string
-  const mode_map: dict<string> = GetConfig('mode_map')
+  const mode_map: dict<string> = config.Get('mode_map')
   var mode_char: string = mode(1)
   if mode_map->has_key(mode_char)
     return mode_map[mode_char]
@@ -14,7 +14,7 @@ def Mode_Content(): string
   if mode_char ==# 'c'
     mode_char = getcmdtype()
   endif
-  return GetConfig('mode_map')->get(mode_char, '')
+  return config.Get('mode_map')->get(mode_char, '')
 enddef
 
 
