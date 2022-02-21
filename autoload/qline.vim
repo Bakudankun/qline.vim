@@ -1,32 +1,33 @@
 vim9script
 
 import '../private/qline/statusline.vim'
+import autoload 'qline/colorscheme.vim'
 
 
-def qline#enable()
+export def Enable()
   set laststatus=2
-  set statusline=%{%qline#statusline()%}
+  set statusline=%{%qline#Statusline()%}
 
-  qline#define_autocmd()
+  DefineAutocmd()
 enddef
 
 
-def qline#define_autocmd()
+export def DefineAutocmd()
   augroup qline
     autocmd!
-    autocmd ColorScheme * qline#colorscheme#reset()
+    autocmd ColorScheme * colorscheme.Reset()
   augroup END
 enddef
 
 
-def qline#disable()
+export def Disable()
   set statusline=
   autocmd! qline
-  qline#colorscheme#reset()
+  colorscheme.Reset()
 enddef
 
 
-def qline#statusline(): string
+export def Statusline(): string
   return statusline.Statusline()
 enddef
 

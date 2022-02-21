@@ -10,8 +10,12 @@ if v:version < 802
 endif
 
 
-command -nargs=1 -complete=custom,qline#colorscheme#get_list
-      \ QlineColorscheme qline#colorscheme#set(<q-args>)
+import autoload 'qline.vim'
+import autoload 'qline/colorscheme.vim'
+
+
+command -nargs=1 -complete=custom,colorscheme.GetList
+      \ QlineColorscheme colorscheme.Set(<q-args>)
 
 
 augroup qline-dummy
@@ -26,11 +30,11 @@ endif
 
 
 if v:vim_did_enter
-  qline#enable()
+  qline.Enable()
 else
   augroup qline-vimenter
     autocmd!
-    autocmd VimEnter * ++once qline#enable()
+    autocmd VimEnter * ++once qline.Enable()
   augroup END
 endif
 

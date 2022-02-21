@@ -155,5 +155,5 @@ or use `:QlineColorscheme` to change the colorscheme.
 ### qline.vim has been disabled for some reason.
 
 When qline.vim runs into an error, qline.vim may be disabled forcibly by Vim.
-`:call qline#enable()` to re-enable.
+`:call qline#Enable()` to re-enable.
 

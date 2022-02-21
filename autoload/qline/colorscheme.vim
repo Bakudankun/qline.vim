@@ -3,14 +3,14 @@ vim9script
 import '../../private/qline/colorscheme.vim'
 
 
-def qline#colorscheme#set(name: string)
+export def Set(name: string)
   colorscheme.Set(name)
 enddef
 
 
-def qline#colorscheme#get_list(argLead: string,
-                               cmdLine: string,
-                               cursorPos: number): string
+export def GetList(argLead: string,
+                   cmdLine: string,
+                   cursorPos: number): string
   return (globpath(&runtimepath, 'autoload/qline/colorscheme/*.vim', 1, 1)
       ->map((_, val) => val->fnamemodify(':t:r'))
     + globpath(&runtimepath, 'autoload/lightline/colorscheme/*.vim', 1, 1)
@@ -21,7 +21,7 @@ def qline#colorscheme#get_list(argLead: string,
 enddef
 
 
-def qline#colorscheme#reset()
+export def Reset()
   colorscheme.ResetHighlight()
 enddef
 
