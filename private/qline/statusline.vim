@@ -168,7 +168,10 @@ def GetComponentContent(name: string): string
       try
         visible = !!Component.visible_condition()
       catch
-        return '#ERROR#'
+        if config.Get('debug.show_component_error')
+          throw v:exception
+        endif
+        return ''
       endtry
     else
       visible = !!Component.visible_condition
@@ -186,7 +189,10 @@ def GetComponentContent(name: string): string
       try
         content = '' .. Component.content()
       catch
-        return '#ERROR#'
+        if config.Get('debug.show_component_error')
+          throw v:exception
+        endif
+        return ''
       endtry
     endif
 

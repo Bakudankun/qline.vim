@@ -40,6 +40,9 @@ enddef
 
 export const config: dict<any> = {
   manual: false,
+  debug: {
+    show_component_error: false,
+  },
   active: {
     left: [
       ['mode', 'paste'],
