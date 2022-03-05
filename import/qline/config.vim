@@ -60,7 +60,7 @@ enddef
 
 
 def GetPreset(name: string): dict<any>
-  return eval('g:qline#preset#' .. name .. '#config')
+  return eval('g:qline#preset#' .. name .. '#preset')
 enddef
 
 
