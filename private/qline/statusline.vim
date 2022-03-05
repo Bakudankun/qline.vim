@@ -165,14 +165,15 @@ def GetComponentContent(name: string): string
       # Assume the component is always visible if visible_condition is not set.
       visible = true
     elseif type(Component.visible_condition) == v:t_func
-      try
+      if config.Get('debug.show_component_error')
         visible = !!Component.visible_condition()
-      catch
-        if config.Get('debug.show_component_error')
-          throw v:exception
-        endif
-        return ''
-      endtry
+      else
+        try
+          visible = !!Component.visible_condition()
+        catch
+          return ''
+        endtry
+      endif
     else
       visible = !!Component.visible_condition
     endif
@@ -186,14 +187,15 @@ def GetComponentContent(name: string): string
     if type(Component.content) == v:t_string
       content = Component.content
     elseif type(Component.content) == v:t_func
-      try
+      if config.Get('debug.show_component_error')
         content = '' .. Component.content()
-      catch
-        if config.Get('debug.show_component_error')
-          throw v:exception
-        endif
-        return ''
-      endtry
+      else
+        try
+          content = '' .. Component.content()
+        catch
+          return ''
+        endtry
+      endif
     endif
 
     if !!Component->get('escape')
