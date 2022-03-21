@@ -3,7 +3,7 @@ vim9script
 import 'qline/config.vim'
 
 
-final palettes: dict<dict<dict<list<string>>>> = {}
+final palettes: dict<dict<dict<dict<any>>>> = {}
 var current_colorscheme: string = ''
 final defined_highlights: list<string> = []
 
@@ -52,7 +52,7 @@ export def ColorExists(name: string): bool
 enddef
 
 
-def GetPalette(): dict<dict<list<string>>>
+def GetPalette(): dict<dict<dict<any>>>
   if palettes->has_key(current_colorscheme)
     return palettes[current_colorscheme]
   endif
@@ -78,7 +78,7 @@ enddef
 
 
 def LoadPalette(name: string)
-  var palette: dict<dict<list<string>>> = {}
+  var palette: dict<dict<dict<any>>>
   if name->stridx('lightline:') == 0
     palette = ConvertLightlinePalette(name[10 : ])
   elseif name->stridx('airline:') == 0
@@ -93,7 +93,7 @@ def LoadPalette(name: string)
 enddef
 
 
-def GetOriginalPalette(name: string): dict<dict<list<string>>>
+def GetOriginalPalette(name: string): dict<dict<dict<any>>>
   try
     return eval('g:qline#colorscheme#' .. name .. '#palette')->deepcopy()
   catch
@@ -103,8 +103,8 @@ def GetOriginalPalette(name: string): dict<dict<list<string>>>
 enddef
 
 
-def ConvertAirlinePalette(name: string): dict<dict<list<string>>>
-  final ret: dict<dict<list<string>>> = {}
+def ConvertAirlinePalette(name: string): dict<dict<dict<any>>>
+  final ret: dict<dict<dict<any>>> = {}
   const palette = GetAirlinePalette(name)
   if !palette
     return ret
@@ -127,15 +127,25 @@ def ConvertAirlinePalette(name: string): dict<dict<list<string>>>
         right0: mode->get('airline_z'),
         right1: mode->get('airline_y'),
         right2: mode->get('airline_x'),
-      }->deepcopy()->filter((_, v) => v))
-    ret[modename].middle = [
-      ret[modename].left2[1],
-      ret[modename].left2[1],
-      ret[modename].left2[3],
-      ret[modename].left2[3],
-    ]
-    if modename !=# 'inactive' && !ret[modename].left0->get(4)
-      ret[modename].left0->insert('bold', 4)
+      }->deepcopy()->filter((_, v) => v)->map((_, v) => {
+        final color: dict<any> = {guifg: v[0], guibg: v[1], ctermfg: v[2], ctermbg: v[3]}
+        if len(v) > 4
+          color.term  = v[4]->split(',')->reduce((acc, val) => acc->extend({[val]: true}), {})
+          color.cterm = color.term
+          color.gui   = color.term
+        endif
+        return color
+      }))
+    ret[modename].middle = {
+      guifg:   ret[modename].left2[1],
+      guibg:   ret[modename].left2[1],
+      ctermfg: ret[modename].left2[3],
+      ctermbg: ret[modename].left2[3],
+    }
+    if modename !=# 'inactive' && !ret[modename].left0->has_key('term')
+      ret[modename].left0.term  = {bold: true}
+      ret[modename].left0.cterm = {bold: true}
+      ret[modename].left0.gui   = {bold: true}
     endif
   endfor
   return ret
@@ -155,8 +165,8 @@ def GetAirlinePalette(name: string): dict<dict<list<string>>>
 enddef
 
 
-def ConvertLightlinePalette(name: string): dict<dict<list<string>>>
-  final ret: dict<dict<list<string>>> = {}
+def ConvertLightlinePalette(name: string): dict<dict<dict<any>>>
+  final ret: dict<dict<dict<any>>> = {}
   const palette = GetLightlinePalette(name)
   if !palette
     return ret
@@ -172,14 +182,25 @@ def ConvertLightlinePalette(name: string): dict<dict<list<string>>>
 
     for [sidename, side] in palette[modename]->items()
       if sidename !=# 'left' && sidename !=# 'right'
-        ret[modename][sidename] = side[0]->copy()
+        const color: list<string> = side[0]
+        ret[modename][sidename] = {guifg: color[0], guibg: color[1], ctermfg: color[2], ctermbg: color[3]}
+        final item = ret[modename][sidename]
+        if len(color) > 4
+          item.term = color[4]->split(',')->reduce((acc, val) => acc->extend({[val]: true}), {})
+          item.cterm = item.term->copy()
+          item.gui = item.term->copy()
+        endif
         continue
       endif
 
-      for idx in range(3)
-        if idx < len(side)
-          ret[modename][sidename .. idx] = side[idx]->copy()
-          continue
+      for idx in range(min([3, len(side)]))
+        const color: list<string> = side[idx]
+        ret[modename][sidename .. idx] = {guifg: color[0], guibg: color[1], ctermfg: color[2], ctermbg: color[3]}
+        final item = ret[modename][sidename .. idx]
+        if len(color) > 4
+          item.term = color[4]->split(',')->reduce((acc, val) => acc->extend({[val]: true}), {})
+          item.cterm = item.term->copy()
+          item.gui = item.term->copy()
         endif
       endfor
     endfor
@@ -237,66 +258,41 @@ def DefineHighlight(mode: string,
     endfor
   endfor
 
-  var guifg = ''
-  var guibg = ''
-  var ctermfg = ''
-  var ctermbg = ''
-  var attr = ''
+  final hl: dict<any> = {}
 
   if !nexttier
-    const color = mode_palette->get(tier, mode_palette.middle)
-    guifg = color[0]
-    guibg = color[1]
-    ctermfg = color[2]
-    ctermbg = color[3]
-    attr = color->get(4, '')
+    hl->extend(mode_palette->get(tier, mode_palette.middle)->deepcopy())
   else
     const fg = mode_palette->get(tier, mode_palette.middle)
     const bg = mode_palette->get(nexttier, mode_palette.middle)
-    guifg = fg[1]
-    guibg = bg[1]
-    ctermfg = fg[3]
-    ctermbg = bg[3]
+    hl.guifg = fg.guibg
+    hl.guibg = bg.guibg
+    hl.ctermfg = fg.ctermbg
+    hl.ctermbg = bg.ctermbg
   endif
 
-  const name = GetHighlightName(mode, tier, nexttier)
+  hl.name = GetHighlightName(mode, tier, nexttier)
 
-  :execute printf('highlight %s guifg=%s guibg=%s ctermfg=%s ctermbg=%s gui=%s term=%s cterm=%s',
-                  name,
-                  guifg   ?? 'NONE',
-                  guibg   ?? 'NONE',
-                  ctermfg ?? 'NONE',
-                  ctermbg ?? 'NONE',
-                  attr    ?? 'NONE',
-                  attr    ?? 'NONE',
-                  attr    ?? 'NONE')
-  defined_highlights->add(name)
+  hlset([hl])
+
+  defined_highlights->add(hl.name)
 enddef
 
 
-def ConvertHighlight(name: string): list<string>
-  const hlid = hlID(name)
-  var guifg = hlid->synIDattr('fg', 'gui')
-  var guibg = hlid->synIDattr('bg', 'gui')
-  var ctermfg = hlid->synIDattr('fg', 'cterm')
-  var ctermbg = hlid->synIDattr('bg', 'cterm')
-  const attr = ['bold', 'italic', 'standout', 'underline', 'undercurl', 'strike']
-    ->map((idx, val) => !hlid->synIDattr(val) ? '' : (idx == 7 ? 'strikethrough' : val))
-    ->filter((_, val) => !!val)->join(',')
+def ConvertHighlight(name: string): dict<any>
+  final hl = hlget(name, true)[0]
 
-  if !!hlid->synIDattr('reverse', 'gui')
-    var buf = guifg
-    guifg = guibg
-    guibg = buf
+  if hl->get('gui', {})->get('reverse', false)
+    [hl.guifg, hl.guibg] = [hl.guibg, hl.guifg]
+    hl.gui.reverse = false
   endif
 
-  if !!hlid->synIDattr('reverse', 'cterm')
-    var buf = ctermfg
-    ctermfg = ctermbg
-    ctermbg = buf
+  if hl->get('cterm', {})->get('reverse', false)
+    [hl.ctermfg, hl.ctermbg] = [hl.ctermbg, hl.ctermfg]
+    hl.cterm.reverse = false
   endif
 
-  return [guifg, guibg, ctermfg, ctermbg, attr]
+  return hl
 enddef
 
 
