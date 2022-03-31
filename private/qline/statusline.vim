@@ -1,7 +1,7 @@
 vim9script
 
-import 'qline/config.vim'
-import './colorscheme.vim'
+import autoload 'qline/config.vim'
+import autoload './colorscheme.vim' as color
 
 
 const left = 'left'
@@ -23,7 +23,6 @@ const mode_strings: dict<string> = {
 
 
 export def Statusline(): string
-  const GetHighlight = colorscheme.GetHighlight
   :doautocmd <nomodeline> User QlineUpdate
 
   const type: string = win_getid() == str2nr(g:actual_curwin) ?
@@ -82,9 +81,9 @@ export def Statusline(): string
       const next_hl = components[index + 1].highlight
 
       if current_hl !=# next_hl
-        const highlighted_separator: string = !separator ? GetHighlight(mode, next_hl) :
-          (side ==# left ? GetHighlight(mode, current_hl, next_hl)
-                         : GetHighlight(mode, next_hl, current_hl)) .. separator .. GetHighlight(mode, next_hl)
+        const highlighted_separator: string = !separator ? color.GetHighlight(mode, next_hl) :
+          (side ==# left ? color.GetHighlight(mode, current_hl, next_hl)
+                         : color.GetHighlight(mode, next_hl, current_hl)) .. separator .. color.GetHighlight(mode, next_hl)
         if side ==# left
           if margin ==# 'INSIDE' || margin ==# 'RIGHT'
             sidestr ..= highlighted_separator .. ' '
@@ -108,21 +107,21 @@ export def Statusline(): string
     endfor
 
     const globmargin: string = margin =~# '\v^(INSIDE|OUTSIDE|LEFT|RIGHT)$' ? ' ' : margin
-    sidestr = GetHighlight(mode, components[0].highlight) .. globmargin ..
+    sidestr = color.GetHighlight(mode, components[0].highlight) .. globmargin ..
                        sidestr .. globmargin
 
     if !!separator && components->len() > 0
       if side ==# left
-        sidestr = sidestr .. GetHighlight(mode, components[-1].highlight, 'middle') .. separator
+        sidestr = sidestr .. color.GetHighlight(mode, components[-1].highlight, 'middle') .. separator
       else
-        sidestr = GetHighlight(mode, components[0].highlight, 'middle') .. separator .. sidestr
+        sidestr = color.GetHighlight(mode, components[0].highlight, 'middle') .. separator .. sidestr
       endif
     endif
 
     statusline[side] = sidestr
   endfor
 
-  return statusline.left .. GetHighlight(mode, 'middle') .. '%=' .. statusline.right
+  return statusline.left .. color.GetHighlight(mode, 'middle') .. '%=' .. statusline.right
 enddef
 
 
@@ -138,7 +137,7 @@ def GetComponent(name: string, highlight: string): dict<any>
   endif
 
   component.content = content
-  if !component->has_key('highlight') || !colorscheme.ColorExists(component.highlight)
+  if !component->has_key('highlight') || !color.ColorExists(component.highlight)
     component.highlight = highlight
   endif
 

@@ -8,12 +8,12 @@ Vim9 script.
 
 ## Requirement
 
-This plugin supports Vim version 9.0+. This means that currently no supported
-Vim exists in the world. The very latest Vim might make use of this plugin, but
-it must be a temporary illusion.
+This plugin supports Vim version 9.0+. This means no supported Vim exists in
+the world for now. The very latest Vim might make use of this plugin, but it
+must be a temporary illusion.
 
-This plugin is under development along with Vim9 script, so anything can change.
-Do not use this plugin regularly.
+This plugin is under development along with Vim9 script, so anything can
+change. Not for daily use.
 
 
 ## Configuration
@@ -24,7 +24,7 @@ with some differences. On loading qline.vim, the dictionary will be "merged"
 with the default configuration, so you can check `g:qline_config` to see the
 current configuration at any time.
 
-The default value is written [here](import/qline/config/default.vim). The
+The default value is written [here](autoload/qline/preset/default.vim). The
 example configuration which is part of mine is in the following spoiler.
 
 <details>
@@ -40,7 +40,7 @@ vim9cmd g:qline_config = {
   separator:    {left: "\ue0b0", right: "\ue0b2", margin: ' '},
   subseparator: {left: "\ue0b1", right: "\ue0b3", margin: ' '},
 # Specify components in the each sides for active/inactive windows.
-# Each modes can also have specific settings.
+# Each modes can also have separate settings.
   active: {
     left: [
       ['mode', 'paste'],
@@ -67,11 +67,11 @@ vim9cmd g:qline_config = {
     separator:    {left: "\ue0c0", right: "\ue0c2", margin: ' '},
     subseparator: {left: "\ue0c1", right: "\ue0c3", margin: ' '},
   },
-# Define components. You can overwrite or append to the default definitions.
-# If its content is a Funcref, it is evaluated before parsing the statusline.
-# If visible_condition results in Falsy, or the content results in empty string,
-# the component is collapsed.
-# Funcrefs are evaluated in the context of the window of the drawing status line.
+  # Define components. You can overwrite or append to the default definitions.
+  # If its content is a Funcref, it is evaluated before parsing the statusline.
+  # The component is collapsed when visible_condition results in Falsy, when
+  # the content results in empty string, or when the evaluation fails. Funcrefs
+  # are evaluated in the context of the window of the drawing status line.
   component: {
     fileinfo: {
       content: () =>
@@ -147,7 +147,7 @@ Then you can use their colorschemes by adding `colorscheme` item to the config:
 let g:qline_config.colorscheme = 'airline:cool'
 ```
 
-or use `:QlineColorscheme` to change the colorscheme.
+or use `:QlineColorscheme` to change the colorscheme after startup.
 
 
 ## Troubleshooting

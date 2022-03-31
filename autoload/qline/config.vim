@@ -1,6 +1,6 @@
 vim9script
 
-import '../../private/qline/util.vim'
+import autoload '../../private/qline/util.vim'
 
 
 var initialized: bool = false
@@ -60,7 +60,7 @@ enddef
 
 
 def GetPreset(name: string): dict<any>
-  return eval('g:qline#preset#' .. name .. '#preset')
+  return eval('g:qline#preset#' .. name .. '#preset')->deepcopy()
 enddef
 
 

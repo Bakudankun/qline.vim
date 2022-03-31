@@ -11,7 +11,7 @@ endif
 
 
 import autoload 'qline.vim'
-import autoload 'qline/colorscheme.vim'
+import autoload '../private/qline/colorscheme.vim'
 
 
 command -nargs=1 -complete=custom,colorscheme.GetList

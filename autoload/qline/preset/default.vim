@@ -1,6 +1,6 @@
 vim9script
 
-import 'qline/config.vim'
+import autoload 'qline/config.vim'
 
 
 def Mode_Content(): string

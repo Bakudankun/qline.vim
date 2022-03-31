@@ -1,11 +1,11 @@
 vim9script
 
-import 'qline/config.vim'
+import autoload 'qline/config.vim'
 
 
 final palettes: dict<dict<dict<dict<any>>>> = {}
 var current_colorscheme: string = ''
-final defined_highlights: list<string> = []
+var defined_highlights: list<string> = []
 
 
 export def GetHighlight(mode: string,
@@ -42,13 +42,26 @@ enddef
 
 
 export def ResetHighlight()
-  defined_highlights->filter((_, _) => false)
+  defined_highlights = []
 enddef
 
 
 export def ColorExists(name: string): bool
   const palette = GetPalette()
   return !!palette && palette.normal->has_key(name) || hlexists(name)
+enddef
+
+
+export def GetList(argLead: string,
+                   cmdLine: string,
+                   cursorPos: number): string
+  return (globpath(&runtimepath, 'autoload/qline/colorscheme/*.vim', 1, 1)
+      ->map((_, val) => val->fnamemodify(':t:r'))
+    + globpath(&runtimepath, 'autoload/lightline/colorscheme/*.vim', 1, 1)
+      ->map((_, val) => 'lightline:' .. val->fnamemodify(':t:r'))
+    + globpath(&runtimepath, 'autoload/airline/themes/*.vim', 1, 1)
+      ->map((_, val) => 'airline:' .. val->fnamemodify(':t:r')))
+    ->join("\n")
 enddef
 
 
