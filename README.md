@@ -44,7 +44,7 @@ vim9cmd g:qline_config = {
   active: {
     left: [
       ['mode', 'paste'],
-      ['gina_branch', 'gina_traffic', 'gina_status', 'filename', 'gitgutter'],
+      ['gin_branch', 'gin_traffic', 'filename', 'gitgutter'],
       ['bufstate']
     ],
     right: [
@@ -89,17 +89,12 @@ vim9cmd g:qline_config = {
     filetype: {
       content: () => nerdfont#find(),
     },
-    gina_branch: {
-      content: () => "\ue0a0" .. gina#component#repo#branch(),
-      visible_condition: function('gina#component#repo#branch'),
+    gin_branch: {
+      content: () => substitute(gin#component#branch#ascii(), '^\(\S\+\).*', '\1', ''),
       highlight: 'Git',
     },
-    gina_traffic: {
-      content: function('gina#component#traffic#preset', ['fancy']),
-      highlight: 'Git',
-    },
-    gina_status: {
-      content: function('gina#component#status#preset', ['fancy']),
+    gin_traffic: {
+      content: () => gin#component#traffic#unicode(),
       highlight: 'Git',
     },
     gitgutter: {
@@ -120,7 +115,8 @@ Note that some components use followings:
 
 * [Nerd Font](https://www.nerdfonts.com/)
 * [lambdalisue/nerdfont.vim](https://github.com/lambdalisue/nerdfont.vim)
-* [lambdalisue/gina.vim](https://github.com/lambdalisue/gina.vim)
+* [lambdalisue/denops.vim](https://github.com/lambdalisue/denops.vim)
+* [lambdalisue/gin.vim](https://github.com/lambdalisue/gin.vim)
 * [airblade/vim-gitgutter](https://github.com/airblade/vim-gitgutter)
 
 
