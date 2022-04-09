@@ -24,11 +24,19 @@ with some differences. On loading qline.vim, the dictionary will be "merged"
 with the default configuration, so you can check `g:qline_config` to see the
 current configuration at any time.
 
-The default value is written [here](autoload/qline/preset/default.vim). The
-example configuration which is part of mine is in the following spoiler.
+The default value is written [here](autoload/qline/preset/default.vim).
 
 <details>
-<summary>Example configuration</summary>
+<summary>Click here to show the example configuration (which is part of mine)</summary>
+
+Note that some components require followings:
+
+* [Nerd Font](https://www.nerdfonts.com/)
+* [lambdalisue/nerdfont.vim](https://github.com/lambdalisue/nerdfont.vim)
+* [Deno](https://deno.land/)
+* [lambdalisue/denops.vim](https://github.com/lambdalisue/denops.vim)
+* [lambdalisue/gin.vim](https://github.com/lambdalisue/gin.vim)
+* [airblade/vim-gitgutter](https://github.com/airblade/vim-gitgutter)
 
 ```vim
 " Define highlight for Git-related components.
@@ -108,16 +116,7 @@ vim9cmd g:qline_config = {
   },
 }
 ```
-
 </details>
-
-Note that some components use followings:
-
-* [Nerd Font](https://www.nerdfonts.com/)
-* [lambdalisue/nerdfont.vim](https://github.com/lambdalisue/nerdfont.vim)
-* [lambdalisue/denops.vim](https://github.com/lambdalisue/denops.vim)
-* [lambdalisue/gin.vim](https://github.com/lambdalisue/gin.vim)
-* [airblade/vim-gitgutter](https://github.com/airblade/vim-gitgutter)
 
 
 ## Colorschemes?
