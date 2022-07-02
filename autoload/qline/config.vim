@@ -21,18 +21,18 @@ export def Get(query: string, mode: string = ''): any
     Init()
   endif
 
-  const dict: string = 'g:qline_config.'
+  const dict: string = 'g:qline_config'
   var varname: string
 
   if !!mode
-    varname = dict .. mode .. '.' .. query
+    varname = $'{dict}.{mode}.{query}'
 
     if exists(varname)
       return eval(varname)->deepcopy()
     endif
 
     if mode !=# 'inactive'
-      varname = dict .. 'active.' .. query
+      varname = $'{dict}.active.{query}'
 
       if exists(varname)
         return eval(varname)->deepcopy()
@@ -40,7 +40,7 @@ export def Get(query: string, mode: string = ''): any
     endif
   endif
 
-  varname = dict .. query
+  varname = $'{dict}.{query}'
 
   if exists(varname)
     return eval(varname)->deepcopy()
@@ -60,7 +60,7 @@ enddef
 
 
 def GetPreset(name: string): dict<any>
-  return eval('g:qline#preset#' .. name .. '#preset')->deepcopy()
+  return eval($'g:qline#preset#{name}#preset')->deepcopy()
 enddef
 
 

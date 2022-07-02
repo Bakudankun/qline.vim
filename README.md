@@ -83,16 +83,12 @@ vim9cmd g:qline_config = {
   component: {
     fileinfo: {
       content: () =>
-        (&fenc ?? &enc) .. ' ' ..
-        nerdfont#fileformat#find() ..
-        (&bomb ? "\U1f4a3" : ''),
+        $'{&fenc ?? &enc} {nerdfont#fileformat#find()}{&bomb ? "\U1f4a3" : ''}',
       visible_condition: () => !&buftype,
     },
     bufstate: {
       content: () =>
-        (&readonly ? "\uf023" : '') ..
-        (&modifiable ? '' : "\uf05e") ..
-        (&modified ? "\uf040" : ''),
+        $'{&readonly ? "\uf023" : ''}{&modifiable ? '' : "\uf05e"}{&modified ? "\uf040" : ''}',
     },
     filetype: {
       content: () => nerdfont#find(),

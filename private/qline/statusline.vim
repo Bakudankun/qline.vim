@@ -157,7 +157,7 @@ def GetComponentContent(name: string): string
   if type(Component) == v:t_string
     return Component
   elseif type(Component) == v:t_func
-    return '' .. Component()
+    return $'{Component()}'
   elseif type(Component) == v:t_dict
     var visible: bool = false
     if !Component->has_key('visible_condition')
@@ -187,10 +187,10 @@ def GetComponentContent(name: string): string
       content = Component.content
     elseif type(Component.content) == v:t_func
       if config.Get('debug.show_component_error')
-        content = '' .. Component.content()
+        content = $'{Component.content()}'
       else
         try
-          content = '' .. Component.content()
+          content = $'{Component.content()}'
         catch
           return ''
         endtry

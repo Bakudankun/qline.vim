@@ -17,7 +17,7 @@ export def GetHighlight(mode: string,
     DefineHighlight(mode, tier, nexttier)
   endif
 
-  return '%#' .. name .. '#'
+  return $'%#{name}#'
 enddef
 
 
@@ -108,9 +108,9 @@ enddef
 
 def GetOriginalPalette(name: string): dict<dict<dict<any>>>
   try
-    return eval('g:qline#colorscheme#' .. name .. '#palette')->deepcopy()
+    return eval($'g:qline#colorscheme#{name}#palette')->deepcopy()
   catch
-    throw 'qline.vim: ERROR: Palette "' .. name .. '" not found.'
+    throw $'qline.vim: ERROR: Palette "{name}" not found.'
   endtry
   return {}
 enddef
@@ -167,12 +167,12 @@ enddef
 
 def GetAirlinePalette(name: string): dict<dict<list<string>>>
   try
-    return eval('g:airline#themes#' .. name .. '#palette')
+    return eval($'g:airline#themes#{name}#palette')
       ->mapnew((_, category) => category
         ->mapnew((_, section) => section
-          ->mapnew((_, val) => '' .. val)))
+          ->mapnew((_, val) => $'{val}')))
   catch
-    throw 'qline.vim: ERROR: Airline palette "' .. name .. '" not found.'
+    throw $'qline.vim: ERROR: Airline palette "{name}" not found.'
   endtry
   return {}
 enddef
@@ -224,13 +224,13 @@ enddef
 
 def GetLightlinePalette(name: string): dict<dict<list<list<string>>>>
   try
-    return eval('g:lightline#colorscheme#' .. name .. '#palette')
+    return eval($'g:lightline#colorscheme#{name}#palette')
       ->mapnew((_, mode) => mode
         ->mapnew((_, side) => side
           ->mapnew((_, tier) => tier
-            ->mapnew((_, val) => '' .. val))))
+            ->mapnew((_, val) => $'{val}'))))
   catch
-    throw 'qline.vim: ERROR: Lightline palette "' .. name .. '" not found.'
+    throw $'qline.vim: ERROR: Lightline palette "{name}" not found.'
   endtry
   return {}
 enddef
