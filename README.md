@@ -8,12 +8,8 @@ Vim9 script.
 
 ## Requirement
 
-This plugin supports Vim version 9.0+. This means no supported Vim exists in
-the world for now. The very latest Vim might make use of this plugin, but it
-must be a temporary illusion.
-
-This plugin is under development along with Vim9 script, so anything can
-change. Not for daily use.
+This plugin supports Vim version 9.0+. Neovim is not supported. This plugin is
+still not released, so anything can change.
 
 
 ## Configuration
@@ -75,11 +71,11 @@ vim9cmd g:qline_config = {
     separator:    {left: "\ue0c0", right: "\ue0c2", margin: ' '},
     subseparator: {left: "\ue0c1", right: "\ue0c3", margin: ' '},
   },
-  # Define components. You can overwrite or append to the default definitions.
-  # If its content is a Funcref, it is evaluated before parsing the statusline.
-  # The component is collapsed when visible_condition results in Falsy, when
-  # the content results in empty string, or when the evaluation fails. Funcrefs
-  # are evaluated in the context of the window of the drawing status line.
+# Define components. You can overwrite or append to the default definitions.
+# If its content is a Funcref, it is evaluated before parsing the statusline.
+# The component is collapsed when visible_condition results in Falsy, when
+# the content results in empty string, or when the evaluation fails. Funcrefs
+# are evaluated in the context of the window of the drawing status line.
   component: {
     fileinfo: {
       content: () =>
