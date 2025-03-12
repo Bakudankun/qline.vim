@@ -140,7 +140,7 @@ def ConvertAirlinePalette(name: string): dict<dict<dict<any>>>
         right0: mode->get('airline_z'),
         right1: mode->get('airline_y'),
         right2: mode->get('airline_x'),
-      }->deepcopy()->filter((_, v) => v)->map((_, v) => {
+      }->deepcopy()->filter((_, v) => !!v)->map((_, v) => {
         final color: dict<any> = {guifg: v[0], guibg: v[1], ctermfg: v[2], ctermbg: v[3]}
         if len(v) > 4
           color.term  = v[4]->split(',')->reduce((acc, val) => acc->extend({[val]: true}), {})
@@ -150,10 +150,10 @@ def ConvertAirlinePalette(name: string): dict<dict<dict<any>>>
         return color
       }))
     ret[modename].middle = {
-      guifg:   ret[modename].left2[1],
-      guibg:   ret[modename].left2[1],
-      ctermfg: ret[modename].left2[3],
-      ctermbg: ret[modename].left2[3],
+      guifg:   ret[modename].left2.guibg,
+      guibg:   ret[modename].left2.guibg,
+      ctermfg: ret[modename].left2.ctermbg,
+      ctermbg: ret[modename].left2.ctermbg,
     }
     if modename !=# 'inactive' && !ret[modename].left0->has_key('term')
       ret[modename].left0.term  = {bold: true}
