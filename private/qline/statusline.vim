@@ -23,8 +23,6 @@ const mode_strings: dict<string> = {
 
 
 export def Statusline(): string
-  :doautocmd <nomodeline> User QlineUpdate
-
   const type: string = win_getid() == str2nr(g:actual_curwin) ?
     'active' : 'inactive'
   const mode: string = type ==# 'inactive' ?
