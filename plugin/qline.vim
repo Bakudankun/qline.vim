@@ -26,12 +26,6 @@ command -nargs=? -complete=custom,colorscheme.GetList QlineColorscheme {
 command QlineShowcase showcase.Start()
 
 
-augroup qline-dummy
-  autocmd!
-  autocmd User QlineUpdate :
-augroup END
-
-
 if exists('g:qline_config.manual') && g:qline_config.manual
   finish
 endif
