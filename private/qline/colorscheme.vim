@@ -112,7 +112,6 @@ def GetOriginalPalette(name: string): dict<dict<dict<any>>>
   catch
     throw $'qline.vim: ERROR: Palette "{name}" not found.'
   endtry
-  return {}
 enddef
 
 
@@ -174,7 +173,6 @@ def GetAirlinePalette(name: string): dict<dict<list<string>>>
   catch
     throw $'qline.vim: ERROR: Airline palette "{name}" not found.'
   endtry
-  return {}
 enddef
 
 
@@ -232,7 +230,6 @@ def GetLightlinePalette(name: string): dict<dict<list<list<string>>>>
   catch
     throw $'qline.vim: ERROR: Lightline palette "{name}" not found.'
   endtry
-  return {}
 enddef
 
 
